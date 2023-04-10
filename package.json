@@ -1,0 +1,28 @@
+{
+  "name": "three-d-renderer",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omanoel/three-d-renderer.git"
+  },
+  "keywords": [],
+  "author": "Olivier MANOEL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/omanoel/three-d-renderer/issues"
+  },
+  "homepage": "https://github.com/omanoel/three-d-renderer#readme",
+  "devDependencies": {
+    "@types/three": "^0.150.1",
+    "three": "^0.151.3",
+    "typescript": "^5.0.4",
+    "vite": "^4.2.1"
+  }
+}
