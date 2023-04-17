@@ -1,5 +1,5 @@
-export interface ThreeDRendererCameraPositionOptions {
-    x: number;
-    y: number;
-    z: number;
+export interface ThreeDRendererPositionOptions {
+  x: number;
+  y: number;
+  z: number;
 }

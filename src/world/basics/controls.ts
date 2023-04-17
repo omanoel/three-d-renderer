@@ -5,10 +5,20 @@ import { IConfigurable } from "../../shared/i-configurable";
 
 export interface ThreeDRendererControlsOptions {
   resetKey: string;
+  minDistance: number;
+  maxDistance: number;
+  zoomSpeed: number;
+  rotateSpeed: number;
+  rangeFactor: number;
 }
 
 export const DEFAULT_CONTROLS_OPTIONS: ThreeDRendererControlsOptions = {
   resetKey: "Escape",
+  minDistance: 0.01,
+  maxDistance: Infinity,
+  zoomSpeed: 0.3,
+  rotateSpeed: 0.3,
+  rangeFactor: 2,
 };
 
 export class ThreeDRendererControls
@@ -29,8 +39,14 @@ export class ThreeDRendererControls
       ...initOptions,
     };
     this._resetKey = options.resetKey;
+    this.minDistance = camera.near * options.rangeFactor;
+    this.maxDistance = camera.far / options.rangeFactor;
+    this.zoomSpeed = options.zoomSpeed;
+    this.rotateSpeed = options.rotateSpeed;
     // this._controls.enableDamping = true;
-    this.addEventListener("change", () => this.handleChange());
+    this.addEventListener("change", () => {
+      this.handleChange();
+    });
     domContainer.ownerDocument.addEventListener(
       "keydown",
       (event: KeyboardEvent) => this.handleKeyDown(event)
@@ -57,5 +73,9 @@ export class ThreeDRendererControls
 
   public tick(_delta: number): void {
     this.update();
+  }
+
+  public get distanceToTarget(): number {
+    return this.target.distanceTo(this.object.position);
   }
 }

@@ -16,12 +16,15 @@ export class ThreeDRendererWorld {
   private _threeDRendererHelpers: ThreeDRendererHelpers | undefined;
   private _threeDRendererComponents: ThreeDRendererComponents | undefined;
   private _infoBox: InfoBox;
+  private _previousDistance: number;
   //
   constructor(domContainer: HTMLDivElement) {
     this._threeDRendererRenderer = new ThreeDRendererRenderer();
     domContainer.append(this._threeDRendererRenderer.domElement);
 
     this._threeDRendererBasics = new ThreeDRendererBasics(domContainer);
+    this._previousDistance =
+      this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
     this.handleEvents();
     this.addHelpers();
     this.addComponents();
@@ -87,13 +90,20 @@ export class ThreeDRendererWorld {
 
   public handleControlsChange(): void {
     this._threeDRendererBasics.threeDRendererControls.handleChange = () => {
-      this._infoBox.setInnerHtml(
-        "Distance: " +
-          this._threeDRendererBasics.threeDRendererControls.target.distanceTo(
-            this._threeDRendererBasics.threeDRendererCamera.position
-          ) +
-          "<br>"
-      );
+      const distance =
+        this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
+      this._infoBox.setInnerHtml("Distance: " + distance + "<br>");
+      if (
+        distance >= this._previousDistance * 2 ||
+        distance <= this._previousDistance / 2
+      ) {
+        this._previousDistance = distance;
+        this._threeDRendererHelpers?.threeDRendererGridsHelper.updateWithOptions(
+          {
+            size: distance,
+          }
+        );
+      }
       this.render();
     };
   }

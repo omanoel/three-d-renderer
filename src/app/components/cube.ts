@@ -1,7 +1,8 @@
 import { BufferGeometry, Material, Mesh } from "three";
 import { IClickable } from "../../shared/i-clickable";
+import { ITickable } from "../../shared/i-tickable";
 
-export class ThreeDRendererCube extends Mesh implements IClickable {
+export class ThreeDRendererCube extends Mesh implements IClickable, ITickable {
   //
   constructor(geometry: BufferGeometry, material: Material | Material[]) {
     super(geometry, material);

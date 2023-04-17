@@ -1,13 +1,13 @@
 import { PerspectiveCamera } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererCameraPositionOptions } from "../../shared/position-options";
+import { ThreeDRendererPositionOptions } from "../../shared/position-options";
 
 export interface ThreeDRendererCameraOptions {
   fov: number;
   aspect: number;
   near: number;
   far: number;
-  position: ThreeDRendererCameraPositionOptions;
+  position: ThreeDRendererPositionOptions;
 }
 
 export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
@@ -16,8 +16,8 @@ export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
   near: 0.1,
   far: 100,
   position: {
-    x: 0,
-    y: 0,
+    x: 10,
+    y: 10,
     z: 10,
   },
 };
@@ -28,6 +28,7 @@ export class ThreeDRendererCamera
 {
   constructor(initOptions?: Partial<ThreeDRendererCameraOptions>) {
     super();
+    this.up.set(0, 0, 1);
     const options = {
       ...DEFAULT_CAMERA_OPTIONS,
       ...initOptions,
