@@ -1,13 +1,13 @@
-import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { AbstractTickable } from '../components/abstracts/abstract-tickable';
+import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { ITickable } from "../../shared/i-tickable";
 
-export class ExpandedLoop {
+export class ThreeDRendererLoop {
   //
   private _camera: PerspectiveCamera;
   private _scene: Scene;
   private _renderer: WebGLRenderer;
   private _clock: Clock;
-  private _tickables: AbstractTickable[];
+  private _tickables: ITickable[];
   constructor(
     renderer: WebGLRenderer,
     camera: PerspectiveCamera,
@@ -20,7 +20,7 @@ export class ExpandedLoop {
     this._tickables = [];
   }
   //
-  public get tickables(): AbstractTickable[] {
+  public get tickables(): ITickable[] {
     return this._tickables;
   }
   //
