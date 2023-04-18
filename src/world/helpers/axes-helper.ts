@@ -1,55 +1,21 @@
-import { ArrowHelper, Color, ColorRepresentation, Group, Vector3 } from "three";
+import { ArrowHelper, Group, Object3D, Vector3 } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererPositionOptions } from "../../shared/position-options";
-
-export interface ThreeDRendererAxesHelperOptions {
-  xAxis: ThreeDRendererAxisHelperOptions;
-  yAxis: ThreeDRendererAxisHelperOptions;
-  zAxis: ThreeDRendererAxisHelperOptions;
-  origin: ThreeDRendererPositionOptions;
-}
-
-export interface ThreeDRendererAxisHelperOptions {
-  length: number;
-  headLength: number;
-  headWidth: number;
-  color: ColorRepresentation;
-  inverted: boolean;
-}
-
-export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
-  xAxis: {
-    length: 5,
-    color: "green",
-    inverted: false,
-    headLength: 1,
-    headWidth: 1,
-  },
-  yAxis: {
-    length: 5,
-    color: "red",
-    inverted: false,
-    headLength: 1,
-    headWidth: 1,
-  },
-  zAxis: {
-    length: 5,
-    color: "blue",
-    inverted: true,
-    headLength: 1,
-    headWidth: 1,
-  },
-  origin: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
-};
+import {
+  ThreeDRendererAxesHelperOptions,
+  DEFAULT_AXES_HELPER_OPTIONS,
+} from "./axes-helper-options";
+import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
+import { AxisTypes } from "../../shared/i-options";
 
 export class ThreeDRendererAxesHelper
   extends Group
   implements IConfigurable<ThreeDRendererAxesHelperOptions>
 {
+  //
+  public static readonly AXIS_ARROW_NAME = "axis-arrow-";
+  // =======================================
+  // CONSTRUCTOR
+  // =======================================
   constructor(initOptions?: Partial<ThreeDRendererAxesHelperOptions>) {
     super();
     const options: ThreeDRendererAxesHelperOptions = {
@@ -59,51 +25,125 @@ export class ThreeDRendererAxesHelper
     this._build(options);
   }
 
+  // =======================================
+  // PUBLIC
+  // =======================================
   public updateWithOptions(
     options: Partial<ThreeDRendererAxesHelperOptions>
   ): void {
-    if (options.xAxis !== undefined) {
-      const axisX = this.getObjectByName("axisX");
+    if (options.x !== undefined) {
+      const axisX = this.getObjectByName(
+        ThreeDRendererAxesHelper.AXIS_ARROW_NAME + "x"
+      );
       if (axisX !== undefined) {
         //
       }
     }
   }
 
+  // =======================================
+  // PRIVATE
+  // =======================================
   private _build(options: ThreeDRendererAxesHelperOptions): void {
     this.clear();
-    const origin = new Vector3(
-      options.origin.x,
-      options.origin.y,
-      options.origin.z
+    const axisArrowX = this._initAxisArrow("x");
+    const axisArrowY = this._initAxisArrow("y");
+    const axisArrowZ = this._initAxisArrow("z");
+    this._updateAxisArrowWithOptions(axisArrowX, options, "x");
+    this._updateAxisArrowWithOptions(axisArrowY, options, "y");
+    this._updateAxisArrowWithOptions(axisArrowZ, options, "z");
+    this.add(axisArrowX, axisArrowY, axisArrowZ);
+  }
+
+  private _initAxisArrow(
+    axis: keyof Pick<ThreeDRendererAxesHelperOptions, AxisTypes>
+  ): ArrowHelper {
+    const arrowOptions = DEFAULT_AXES_HELPER_OPTIONS[axis];
+    const arrow = new ArrowHelper(
+      this._getAxisArrowDirection(axis, arrowOptions.inverted),
+      new Vector3(
+        arrowOptions.position.x,
+        arrowOptions.position.y,
+        arrowOptions.position.z
+      ),
+      arrowOptions.length,
+      arrowOptions.color
     );
-    const axisX = new ArrowHelper(
-      new Vector3(options.xAxis.inverted ? -1 : 1, 0, 0),
-      origin,
-      options.xAxis.length,
-      new Color(options.xAxis.color) /*,
-      options.xAxis.headLength,
-      options.xAxis.headWidth*/
+    arrow.name = ThreeDRendererAxesHelper.AXIS_ARROW_NAME + axis;
+    return arrow;
+  }
+
+  private _getAxisArrowDirection(
+    axis: keyof Pick<ThreeDRendererAxesHelperOptions, AxisTypes>,
+    inverted: boolean
+  ): Vector3 {
+    let direction: Vector3;
+    switch (axis) {
+      case "x": {
+        direction = new Vector3(inverted ? -1 : 1, 0, 0);
+        break;
+      }
+      case "y": {
+        direction = new Vector3(0, inverted ? -1 : 1, 0);
+        break;
+      }
+      case "z": {
+        direction = new Vector3(0, 0, inverted ? -1 : 1);
+        break;
+      }
+    }
+    return direction;
+  }
+
+  private _updateAxisArrowWithOptions(
+    axisArrow: Object3D,
+    axisHelperOptions: Partial<ThreeDRendererAxesHelperOptions>,
+    axisArrowOptionsAttributeName: keyof Pick<
+      ThreeDRendererAxesHelperOptions,
+      AxisTypes
+    >
+  ): void {
+    const axisArrowOptions = axisHelperOptions[axisArrowOptionsAttributeName];
+
+    axisArrow.visible = GetOptionValueUtil.getIfDefined(
+      axisArrow.visible,
+      axisHelperOptions.visible,
+      axisArrowOptions?.visible
     );
-    axisX.name = "axisX";
-    const axisY = new ArrowHelper(
-      new Vector3(0, options.yAxis.inverted ? -1 : 1, 0),
-      origin,
-      options.yAxis.length,
-      new Color(options.yAxis.color) /*,
-      options.yAxis.headLength,
-      options.yAxis.headWidth*/
+
+    axisArrow.position.set(
+      GetOptionValueUtil.getIfDefined(
+        axisArrow.position.x,
+        axisHelperOptions.position?.x,
+        axisArrowOptions?.position?.x
+      ),
+      GetOptionValueUtil.getIfDefined(
+        axisArrow.position.y,
+        axisHelperOptions.position?.y,
+        axisArrowOptions?.position?.y
+      ),
+      GetOptionValueUtil.getIfDefined(
+        axisArrow.position.z,
+        axisHelperOptions.position?.z,
+        axisArrowOptions?.position?.z
+      )
     );
-    axisY.name = "axisY";
-    const axisZ = new ArrowHelper(
-      new Vector3(0, 0, options.zAxis.inverted ? -1 : 1),
-      origin,
-      options.zAxis.length,
-      new Color(options.zAxis.color) /*,
-      options.zAxis.headLength,
-      options.zAxis.headWidth*/
-    );
-    axisZ.name = "axisZ";
-    this.add(axisX, axisY, axisZ);
+
+    if (axisArrow instanceof ArrowHelper) {
+      axisArrow.setDirection(
+        this._getAxisArrowDirection(
+          axisArrowOptionsAttributeName,
+          GetOptionValueUtil.getIfDefined(false, axisArrowOptions?.inverted)
+        )
+      );
+
+      if (axisArrowOptions?.length !== undefined) {
+        axisArrow.setLength(axisArrowOptions.length);
+      }
+
+      if (axisArrowOptions?.color !== undefined) {
+        axisArrow.setColor(axisArrowOptions.color);
+      }
+    }
   }
 }

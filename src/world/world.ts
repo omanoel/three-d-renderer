@@ -3,31 +3,51 @@ import { ThreeDRendererRenderer } from "./systems/renderer";
 import { ThreeDRendererWindowResizer } from "./systems/window-resizer";
 import { ThreeDRendererLoop } from "./systems/loop";
 import { InfoBox } from "./panels/info-box";
-import { BoxGeometry, MeshStandardMaterial } from "three";
+import {
+  BoxGeometry,
+  Intersection,
+  MeshStandardMaterial,
+  Object3D,
+} from "three";
 import { ThreeDRendererHelpers } from "./helpers/_helpers";
 import { ThreeDRendererComponents } from "./components/_components";
 import { ThreeDRendererBasics } from "./basics/_basics";
+import { Font } from "three/examples/jsm/loaders/FontLoader";
 
 export class ThreeDRendererWorld {
   //
   private _threeDRendererRenderer: ThreeDRendererRenderer;
   private _threeDRendererBasics: ThreeDRendererBasics;
   private _loop: ThreeDRendererLoop;
-  private _threeDRendererHelpers: ThreeDRendererHelpers | undefined;
-  private _threeDRendererComponents: ThreeDRendererComponents | undefined;
+  private _threeDRendererHelpers: ThreeDRendererHelpers;
+  private _threeDRendererComponents: ThreeDRendererComponents;
   private _infoBox: InfoBox;
   private _previousDistance: number;
   //
-  constructor(domContainer: HTMLDivElement) {
+  constructor(domContainer: HTMLDivElement, font: Font) {
     this._threeDRendererRenderer = new ThreeDRendererRenderer();
     domContainer.append(this._threeDRendererRenderer.domElement);
 
-    this._threeDRendererBasics = new ThreeDRendererBasics(domContainer);
+    // Basics
+    this._threeDRendererBasics = new ThreeDRendererBasics(
+      domContainer,
+      this._threeDRendererRenderer
+    );
+    // Helpers
+    this._threeDRendererHelpers = new ThreeDRendererHelpers(
+      this._threeDRendererBasics.threeDRendererCamera,
+      this._threeDRendererBasics.threeDRendererControls,
+      font
+    );
+    // Components
+    this._threeDRendererComponents = new ThreeDRendererComponents();
+    this._threeDRendererBasics.threeDRendererScene.add(
+      this._threeDRendererHelpers,
+      this._threeDRendererComponents
+    );
     this._previousDistance =
       this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
-    this.handleEvents();
-    this.addHelpers();
-    this.addComponents();
+    this._handleEvents();
 
     const threeDRendererWindowResizer = new ThreeDRendererWindowResizer(
       domContainer,
@@ -59,19 +79,7 @@ export class ThreeDRendererWorld {
     this._loop.stop();
   }
 
-  public addHelpers(): void {
-    this._threeDRendererHelpers = new ThreeDRendererHelpers();
-    this._threeDRendererBasics.threeDRendererScene.add(
-      this._threeDRendererHelpers
-    );
-  }
-
-  public addComponents(): void {
-    this._threeDRendererComponents = new ThreeDRendererComponents();
-    this._threeDRendererBasics.threeDRendererScene.add(
-      this._threeDRendererComponents
-    );
-  }
+  public addComponents(): void {}
 
   public addMesh(): void {
     // create a geometry
@@ -84,26 +92,69 @@ export class ThreeDRendererWorld {
     this._threeDRendererBasics.threeDRendererScene.add(cube);
   }
 
-  public handleEvents(): void {
-    this.handleControlsChange();
+  private _handleEvents(): void {
+    this._handleRaycasterMouseOver();
+    this._handleRaycasterMouseOut();
+    this._handleRaycasterMouseDblClick();
+    this._handleControlsChange();
   }
 
-  public handleControlsChange(): void {
+  private _handleRaycasterMouseOver(): void {
+    this._threeDRendererBasics.threeDRendererRaycaster.handleMouseOver = (
+      intersected: Intersection<Object3D>
+    ) => {
+      this._threeDRendererHelpers.threeDRendererCrossPointer.display(
+        intersected.point
+      );
+      // this._threeDRendererRaycasterTip.display(intersected);
+      this.render();
+    };
+  }
+  private _handleRaycasterMouseOut(): void {
+    this._threeDRendererBasics.threeDRendererRaycaster.handleMouseOut = () => {
+      this._threeDRendererHelpers.threeDRendererCrossPointer.hide();
+      // this._threeDRendererRaycasterTip.hide();
+      this.render();
+    };
+  }
+  private _handleRaycasterMouseDblClick(): void {
+    this._threeDRendererBasics.threeDRendererRaycaster.handleMouseDblClick = (
+      intersected: Intersection<Object3D>
+    ) => {
+      this._threeDRendererBasics.threeDRendererControls.enableDamping = true;
+      this._threeDRendererBasics.threeDRendererControls.enabled = false;
+      this._threeDRendererBasics.threeDRendererControls.setTarget(
+        intersected.point
+      );
+      this._threeDRendererBasics.threeDRendererControls.update();
+      this.render();
+      this._threeDRendererBasics.threeDRendererControls.enableDamping = false;
+      this._threeDRendererBasics.threeDRendererControls.enabled = true;
+      this._threeDRendererBasics.threeDRendererControls.update();
+    };
+  }
+
+  public _handleControlsChange(): void {
     this._threeDRendererBasics.threeDRendererControls.handleChange = () => {
       const distance =
         this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
       this._infoBox.setInnerHtml("Distance: " + distance + "<br>");
-      if (
-        distance >= this._previousDistance * 2 ||
-        distance <= this._previousDistance / 2
-      ) {
-        this._previousDistance = distance;
-        this._threeDRendererHelpers?.threeDRendererGridsHelper.updateWithOptions(
+      let needResize = false;
+      if (distance >= this._previousDistance * 2) {
+        this._previousDistance *= 2;
+        needResize = true;
+      } else if (distance <= this._previousDistance / 2) {
+        this._previousDistance /= 2;
+        needResize = true;
+      }
+      if (needResize) {
+        this._threeDRendererHelpers.threeDRendererGridsHelper.updateWithOptions(
           {
-            size: distance,
+            size: this._previousDistance,
           }
         );
       }
+      this._threeDRendererHelpers.threeDRendererInfiniteGridsHelper.autoScale();
       this.render();
     };
   }

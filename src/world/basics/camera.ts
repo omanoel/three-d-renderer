@@ -1,26 +1,10 @@
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererPositionOptions } from "../../shared/position-options";
-
-export interface ThreeDRendererCameraOptions {
-  fov: number;
-  aspect: number;
-  near: number;
-  far: number;
-  position: ThreeDRendererPositionOptions;
-}
-
-export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
-  fov: 35,
-  aspect: 1,
-  near: 0.1,
-  far: 100,
-  position: {
-    x: 10,
-    y: 10,
-    z: 10,
-  },
-};
+import {
+  ThreeDRendererCameraOptions,
+  DEFAULT_CAMERA_OPTIONS,
+} from "./camera-options";
+import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
 
 export class ThreeDRendererCamera
   extends PerspectiveCamera
@@ -39,23 +23,35 @@ export class ThreeDRendererCamera
   public updateWithOptions(
     options: Partial<ThreeDRendererCameraOptions>
   ): void {
-    if (options.fov !== undefined) {
-      this.fov = options.fov;
-    }
-    if (options.aspect !== undefined) {
-      this.aspect = options.aspect;
-    }
-    if (options.near !== undefined) {
-      this.near = options.near;
-    }
-    if (options.far !== undefined) {
-      this.far = options.far;
-    }
+    this.fov = GetOptionValueUtil.getIfDefined(this.fov, options.fov);
+    this.aspect = GetOptionValueUtil.getIfDefined(this.aspect, options.aspect);
+    this.near = GetOptionValueUtil.getIfDefined(this.near, options.near);
+    this.far = GetOptionValueUtil.getIfDefined(this.far, options.far);
+
     if (options.position !== undefined) {
       this.position.set(
-        options.position.x,
-        options.position.y,
-        options.position.z
+        GetOptionValueUtil.getIfDefined(this.position.x, options.position.x),
+        GetOptionValueUtil.getIfDefined(this.position.y, options.position.y),
+        GetOptionValueUtil.getIfDefined(this.position.z, options.position.z)
+      );
+    }
+
+    if (options.lookAt !== undefined) {
+      this.lookAt(
+        new Vector3(
+          GetOptionValueUtil.getIfDefined(
+            DEFAULT_CAMERA_OPTIONS.lookAt.x,
+            options.lookAt.x
+          ),
+          GetOptionValueUtil.getIfDefined(
+            DEFAULT_CAMERA_OPTIONS.lookAt.y,
+            options.lookAt.y
+          ),
+          GetOptionValueUtil.getIfDefined(
+            DEFAULT_CAMERA_OPTIONS.lookAt.z,
+            options.lookAt.z
+          )
+        )
       );
     }
   }

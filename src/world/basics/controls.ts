@@ -1,25 +1,12 @@
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { ITickable } from "../../shared/i-tickable";
 import { IConfigurable } from "../../shared/i-configurable";
-
-export interface ThreeDRendererControlsOptions {
-  resetKey: string;
-  minDistance: number;
-  maxDistance: number;
-  zoomSpeed: number;
-  rotateSpeed: number;
-  rangeFactor: number;
-}
-
-export const DEFAULT_CONTROLS_OPTIONS: ThreeDRendererControlsOptions = {
-  resetKey: "Escape",
-  minDistance: 0.01,
-  maxDistance: Infinity,
-  zoomSpeed: 0.3,
-  rotateSpeed: 0.3,
-  rangeFactor: 2,
-};
+import {
+  ThreeDRendererControlsOptions,
+  DEFAULT_CONTROLS_OPTIONS,
+} from "./controls-options";
+import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
 
 export class ThreeDRendererControls
   extends OrbitControls
@@ -56,9 +43,10 @@ export class ThreeDRendererControls
   public updateWithOptions(
     options: Partial<ThreeDRendererControlsOptions>
   ): void {
-    if (options.resetKey !== undefined) {
-      this._resetKey = options.resetKey;
-    }
+    this._resetKey = GetOptionValueUtil.getIfDefined(
+      this._resetKey,
+      options.resetKey
+    );
   }
 
   public handleChange(): void {
@@ -77,5 +65,9 @@ export class ThreeDRendererControls
 
   public get distanceToTarget(): number {
     return this.target.distanceTo(this.object.position);
+  }
+
+  public setTarget(position: Vector3): void {
+    this.target.set(position.x, position.y, position.z);
   }
 }

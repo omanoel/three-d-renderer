@@ -1,23 +1,9 @@
-import { Color, ColorRepresentation, DirectionalLight } from "three";
+import { Color, DirectionalLight } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererPositionOptions } from "../../shared/position-options";
-
-export interface ThreeDRendererDirectionalLightOptions {
-  color: ColorRepresentation;
-  intensity: number;
-  position: ThreeDRendererPositionOptions;
-}
-
-export const DEFAULT_DIRECTIONAL_LIGHT_OPTIONS: ThreeDRendererDirectionalLightOptions =
-  {
-    color: "white",
-    intensity: 5,
-    position: {
-      x: 10,
-      y: 10,
-      z: 10,
-    },
-  };
+import {
+  ThreeDRendererDirectionalLightOptions,
+  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
+} from "./directional-light-options";
 
 export class ThreeDRendererDirectionalLight
   extends DirectionalLight

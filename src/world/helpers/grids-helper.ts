@@ -1,17 +1,9 @@
-import { ColorRepresentation, GridHelper, Group, Material } from "three";
+import { GridHelper, Group, Material } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-
-export interface ThreeDRendererGridsHelperOptions {
-  size: number;
-  divisions: number;
-  color: ColorRepresentation;
-}
-
-export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
-  size: 10,
-  divisions: 10,
-  color: "grey",
-};
+import {
+  ThreeDRendererGridsHelperOptions,
+  DEFAULT_GRIDS_HELPER_OPTIONS,
+} from "./grids-helper-options";
 
 export class ThreeDRendererGridsHelper
   extends Group
@@ -19,6 +11,9 @@ export class ThreeDRendererGridsHelper
 {
   private _options: ThreeDRendererGridsHelperOptions;
 
+  // =======================================
+  // CONSTRUCTOR
+  // =======================================
   constructor(initOptions?: Partial<ThreeDRendererGridsHelperOptions>) {
     super();
     const options = {
@@ -29,6 +24,9 @@ export class ThreeDRendererGridsHelper
     this._build();
   }
 
+  // =======================================
+  // PUBLIC
+  // =======================================
   public updateWithOptions(
     options: Partial<ThreeDRendererGridsHelperOptions>
   ): void {
@@ -38,6 +36,9 @@ export class ThreeDRendererGridsHelper
     this._build();
   }
 
+  // =======================================
+  // PRIVATE
+  // =======================================
   private _buildGridHelper(horizontalPlane: boolean): GridHelper {
     const gridHelper = new GridHelper(
       this._options.size,

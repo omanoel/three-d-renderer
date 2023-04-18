@@ -1,16 +1,9 @@
-import { AmbientLight, Color, ColorRepresentation } from "three";
+import { AmbientLight, Color } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-
-export interface ThreeDRendererAmbientLightOptions {
-  color: ColorRepresentation;
-  intensity: number;
-}
-
-export const DEFAULT_AMBIENT_LIGHT_OPTIONS: ThreeDRendererAmbientLightOptions =
-  {
-    color: "white",
-    intensity: 0.2,
-  };
+import {
+  ThreeDRendererAmbientLightOptions,
+  DEFAULT_AMBIENT_LIGHT_OPTIONS,
+} from "./ambient-light-options";
 
 export class ThreeDRendererAmbientLight
   extends AmbientLight

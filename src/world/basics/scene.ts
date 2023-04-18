@@ -1,13 +1,9 @@
-import { Color, ColorRepresentation, Scene } from "three";
+import { Color, Scene } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
-
-export interface ThreeDRendererSceneOptions {
-  backgroundColor: ColorRepresentation;
-}
-
-export const DEFAULT_SCENE_OPTIONS: ThreeDRendererSceneOptions = {
-  backgroundColor: "black",
-};
+import {
+  ThreeDRendererSceneOptions,
+  DEFAULT_SCENE_OPTIONS,
+} from "./scene-options";
 
 export class ThreeDRendererScene
   extends Scene

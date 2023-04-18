@@ -1,25 +1,11 @@
 import { Group } from "three";
 import { IConfigurable } from "../../shared/i-configurable";
+import { ThreeDRendererAmbientLight } from "./ambient-light";
+import { ThreeDRendererDirectionalLight } from "./directional-light";
 import {
-  DEFAULT_AMBIENT_LIGHT_OPTIONS,
-  ThreeDRendererAmbientLight,
-  ThreeDRendererAmbientLightOptions,
-} from "./ambient-light";
-import {
-  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
-  ThreeDRendererDirectionalLight,
-  ThreeDRendererDirectionalLightOptions,
-} from "./directional-light";
-
-export interface ThreeDRendererComponentsOptions {
-  ambientLight: ThreeDRendererAmbientLightOptions;
-  directionalLight: ThreeDRendererDirectionalLightOptions;
-}
-
-export const COMPONENTS_OPTIONS: ThreeDRendererComponentsOptions = {
-  ambientLight: DEFAULT_AMBIENT_LIGHT_OPTIONS,
-  directionalLight: DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
-};
+  ThreeDRendererComponentsOptions,
+  DEFAULT_COMPONENTS_OPTIONS,
+} from "./_components-options";
 
 export class ThreeDRendererComponents
   extends Group
@@ -28,19 +14,26 @@ export class ThreeDRendererComponents
   private _threeDRendererAmbientLight: ThreeDRendererAmbientLight;
   private _threeDRendererDirectionalLight: ThreeDRendererDirectionalLight;
 
+  // =======================================
+  // CONSTRUCTOR
+  // =======================================
   constructor(initOptions?: Partial<ThreeDRendererComponentsOptions>) {
     super();
     const options = {
-      ...COMPONENTS_OPTIONS,
+      ...DEFAULT_COMPONENTS_OPTIONS,
       ...initOptions,
     };
     this._threeDRendererAmbientLight = new ThreeDRendererAmbientLight();
     this._threeDRendererDirectionalLight = new ThreeDRendererDirectionalLight();
+
     this.updateWithOptions(options);
     this.add(this._threeDRendererAmbientLight);
     this.add(this._threeDRendererDirectionalLight);
   }
 
+  // =======================================
+  // PUBLIC
+  // =======================================
   public updateWithOptions(
     options: Partial<ThreeDRendererComponentsOptions>
   ): void {
@@ -52,5 +45,15 @@ export class ThreeDRendererComponents
         options.directionalLight
       );
     }
+  }
+
+  // =======================================
+  // GETTER
+  // =======================================
+  public get threeDRendererAmbientLight(): ThreeDRendererAmbientLight {
+    return this._threeDRendererAmbientLight;
+  }
+  public get threeDRendererDirectionalLight(): ThreeDRendererDirectionalLight {
+    return this._threeDRendererDirectionalLight;
   }
 }
