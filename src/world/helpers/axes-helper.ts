@@ -13,15 +13,23 @@ export class ThreeDRendererAxesHelper
 {
   //
   public static readonly AXIS_ARROW_NAME = "axis-arrow-";
+  //
+  private _originalDistanceToTarget: number;
+  private _options: ThreeDRendererAxesHelperOptions;
   // =======================================
   // CONSTRUCTOR
   // =======================================
-  constructor(initOptions?: Partial<ThreeDRendererAxesHelperOptions>) {
+  constructor(
+    distanceToTarget: number,
+    initOptions?: Partial<ThreeDRendererAxesHelperOptions>
+  ) {
     super();
     const options: ThreeDRendererAxesHelperOptions = {
       ...DEFAULT_AXES_HELPER_OPTIONS,
       ...initOptions,
     };
+    this._originalDistanceToTarget = distanceToTarget;
+    this._options = options;
     this._build(options);
   }
 
@@ -39,6 +47,14 @@ export class ThreeDRendererAxesHelper
         //
       }
     }
+  }
+  public resize(distance: number): void {
+    const options: ThreeDRendererAxesHelperOptions = {
+      ...this._options,
+      length:
+        (this._options.length * distance) / this._originalDistanceToTarget,
+    };
+    this._build(options);
   }
 
   // =======================================
@@ -66,7 +82,7 @@ export class ThreeDRendererAxesHelper
         arrowOptions.position.y,
         arrowOptions.position.z
       ),
-      arrowOptions.length,
+      this._options.length,
       arrowOptions.color
     );
     arrow.name = ThreeDRendererAxesHelper.AXIS_ARROW_NAME + axis;
@@ -137,8 +153,8 @@ export class ThreeDRendererAxesHelper
         )
       );
 
-      if (axisArrowOptions?.length !== undefined) {
-        axisArrow.setLength(axisArrowOptions.length);
+      if (axisHelperOptions?.length !== undefined) {
+        axisArrow.setLength(axisHelperOptions.length);
       }
 
       if (axisArrowOptions?.color !== undefined) {

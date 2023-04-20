@@ -19,10 +19,16 @@ export class ThreeDRendererCrossPointer
   //
   public static NAME = "CROSS_POINTER";
   private _material: LineBasicMaterial;
+  private _originalDistanceToTarget: number;
+  private _lineLength: number;
+
   // =======================================
   // CONSTRUCTOR
   // =======================================
-  constructor(initOptions?: Partial<ThreeDRendererCrossPointerOptions>) {
+  constructor(
+    distanceToTarget: number,
+    initOptions?: Partial<ThreeDRendererCrossPointerOptions>
+  ) {
     super();
     const options: ThreeDRendererCrossPointerOptions = {
       ...DEFAULT_CROSS_POINTER_OPTIONS,
@@ -34,6 +40,8 @@ export class ThreeDRendererCrossPointer
     });
     this.visible = false;
     this.name = ThreeDRendererCrossPointer.NAME;
+    this._originalDistanceToTarget = distanceToTarget;
+    this._lineLength = options.lineLength;
     this._build(options);
   }
 
@@ -57,15 +65,24 @@ export class ThreeDRendererCrossPointer
   public hide(): void {
     this.visible = false;
   }
+  public resize(distance: number): void {
+    const options: Partial<ThreeDRendererCrossPointerOptions> = {
+      lineLength:
+        (this._lineLength * distance) / this._originalDistanceToTarget,
+    };
+    this._build(options);
+  }
 
   // =======================================
   // PRIVATE
   // =======================================
-  private _build(options: ThreeDRendererCrossPointerOptions): void {
-    this.clear();
-    this.add(this._createCrossLine(options.lineLength, 0, 0, 0));
-    this.add(this._createCrossLine(options.lineLength, 0, Math.PI / 2, 0));
-    this.add(this._createCrossLine(options.lineLength, 0, 0, Math.PI / 2));
+  private _build(options: Partial<ThreeDRendererCrossPointerOptions>): void {
+    if (options.lineLength !== undefined) {
+      this.clear();
+      this.add(this._createCrossLine(options.lineLength, 0, 0, 0));
+      this.add(this._createCrossLine(options.lineLength, 0, Math.PI / 2, 0));
+      this.add(this._createCrossLine(options.lineLength, 0, 0, Math.PI / 2));
+    }
   }
   private _createCrossLine(
     lineLength: number,

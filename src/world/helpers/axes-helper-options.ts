@@ -8,6 +8,12 @@ import { ThreeDRendererObject3DOptions } from "../../shared/i-options";
 export interface ThreeDRendererAxesHelperOptions
   extends ThreeDRendererObject3DOptions {
   /**
+   * Length of the Axis Arrow
+   *
+   * @defaultValue 1
+   */
+  length: number;
+  /**
    * Represents the options available to alter the properties
    * of the X AxisArrow object rendered by the library
    */
@@ -42,16 +48,11 @@ export interface ThreeDRendererAxisHelperOptions
    * @defaultValue 'red' for X, 'green' for Y, 'blue' for Z
    */
   color: ColorRepresentation;
-  /**
-   * Length of the Axis Arrow
-   *
-   * @defaultValue 1
-   */
-  length: number;
 }
 
 export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
   visible: true,
+  length: 5,
   position: {
     x: 0,
     y: 0,
@@ -66,7 +67,6 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
     },
     inverted: false,
     color: "red",
-    length: 1,
   },
   y: {
     visible: true,
@@ -77,7 +77,6 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
     },
     inverted: false,
     color: "green",
-    length: 1,
   },
   z: {
     visible: true,
@@ -86,8 +85,7 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       y: 0,
       z: 0,
     },
-    inverted: false,
+    inverted: true,
     color: "blue",
-    length: 1,
   },
 };

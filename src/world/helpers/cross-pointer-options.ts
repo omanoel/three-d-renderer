@@ -9,6 +9,6 @@ export interface ThreeDRendererCrossPointerOptions {
 export const DEFAULT_CROSS_POINTER_OPTIONS: ThreeDRendererCrossPointerOptions =
   {
     lineWidth: 2,
-    lineLength: 0.25,
+    lineLength: 0.5,
     color: "red",
   };
