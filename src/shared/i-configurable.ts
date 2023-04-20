@@ -1,3 +1,3 @@
-export interface IConfigurable<T> {
-    updateWithOptions: (options: Partial<T>) => void;
+export interface IConfigurable<OPT> {
+  updateWithOptions: (options: Partial<OPT>) => void;
 }

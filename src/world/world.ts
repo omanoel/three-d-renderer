@@ -1,14 +1,9 @@
-import { ThreeDRendererCube } from "../app/components/cube";
+import { GetOptionValueUtil } from "./../shared/utils/get-option-value-util";
 import { ThreeDRendererRenderer } from "./systems/renderer";
 import { ThreeDRendererWindowResizer } from "./systems/window-resizer";
 import { ThreeDRendererLoop } from "./systems/loop";
 import { InfoBox } from "./panels/info-box";
-import {
-  BoxGeometry,
-  Intersection,
-  MeshStandardMaterial,
-  Object3D,
-} from "three";
+import { Group, Intersection, Object3D } from "three";
 import { ThreeDRendererHelpers } from "./helpers/_helpers";
 import { ThreeDRendererComponents } from "./components/_components";
 import { ThreeDRendererBasics } from "./basics/_basics";
@@ -81,21 +76,15 @@ export class ThreeDRendererWorld {
 
   public addComponents(): void {}
 
-  public addMesh(): void {
-    // create a geometry
-    const geometry = new BoxGeometry(2, 2, 2);
-    const material = new MeshStandardMaterial({ color: "purple" });
-    // create a Mesh containing the geometry and material
-    const cube = new ThreeDRendererCube(geometry, material);
-    cube.position.set(-0.5, -0.1, 0.8);
-    cube.rotation.set(-0.5, -0.1, 0.8);
-    this._threeDRendererBasics.threeDRendererScene.add(cube);
+  public addGroup(group: Group): void {
+    this._threeDRendererBasics.threeDRendererScene.add(group);
   }
 
   private _handleEvents(): void {
     this._handleRaycasterMouseOver();
     this._handleRaycasterMouseOut();
     this._handleRaycasterMouseDblClick();
+    this._handleRaycasterMouseClick();
     this._handleControlsChange();
   }
 
@@ -115,6 +104,22 @@ export class ThreeDRendererWorld {
       this._threeDRendererHelpers.threeDRendererCrossPointer.hide();
       // this._threeDRendererRaycasterTip.hide();
       this.render();
+    };
+  }
+  private _handleRaycasterMouseClick(): void {
+    this._threeDRendererBasics.threeDRendererRaycaster.handleMouseClick = (
+      intersected: Intersection<Object3D>
+    ) => {
+      if ((intersected.object as any).onMouseClick !== undefined) {
+        (intersected.object as any).onMouseClick({
+          target: intersected.object,
+        });
+      }
+      if ((intersected.object as any).parent.onMouseClick !== undefined) {
+        (intersected.object as any).parent.onMouseClick({
+          target: intersected.object,
+        });
+      }
     };
   }
   private _handleRaycasterMouseDblClick(): void {
@@ -138,23 +143,22 @@ export class ThreeDRendererWorld {
     this._threeDRendererBasics.threeDRendererControls.handleChange = () => {
       const distance =
         this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
-      this._infoBox.setInnerHtml("Distance: " + distance + "<br>");
-      let needResize = false;
-      if (distance >= this._previousDistance * 2) {
-        this._previousDistance *= 2;
-        needResize = true;
-      } else if (distance <= this._previousDistance / 2) {
-        this._previousDistance /= 2;
-        needResize = true;
-      }
-      if (needResize) {
-        this._threeDRendererHelpers.threeDRendererGridsHelper.updateWithOptions(
-          {
-            size: this._previousDistance,
-          }
+      this._infoBox.setInnerHtml(
+        "Distance: " +
+          GetOptionValueUtil.getFixedValue(distance) +
+          "<br>" +
+          "Count:" +
+          this._threeDRendererBasics.threeDRendererScene.countObjects +
+          "<br>"
+      );
+      this._previousDistance =
+        this._threeDRendererHelpers.threeDRendererGridsHelper.resize(
+          distance,
+          this._previousDistance,
+          this._threeDRendererBasics.threeDRendererCamera.position
         );
-      }
-      this._threeDRendererHelpers.threeDRendererInfiniteGridsHelper.autoScale();
+      this._threeDRendererHelpers.threeDRendererCrossPointer.resize(distance);
+      this._threeDRendererHelpers.threeDRendererAxesHelper.resize(distance);
       this.render();
     };
   }

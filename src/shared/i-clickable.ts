@@ -1,5 +1,5 @@
-export interface IClickable {
-  onMouseOver: () => void;
-  onMouseOut: () => void;
-  onMouseClick: () => void;
+export interface IClickable<E> {
+  onMouseOver: (event: E) => void;
+  onMouseOut: (event: E) => void;
+  onMouseClick: (event: E) => void;
 }
