@@ -6,7 +6,6 @@ import {
   ThreeDRendererHelpersOptions,
   DEFAULT_HELPERS_OPTIONS,
 } from "./_helpers-options";
-import { ThreeDRendererInfiniteGridsHelper } from "./infinite-grids-helper";
 import { ThreeDRendererCamera } from "../basics/camera";
 import { ThreeDRendererControls } from "../basics/controls";
 import { Font } from "three/examples/jsm/loaders/FontLoader";
@@ -18,7 +17,6 @@ export class ThreeDRendererHelpers
 {
   private _threeDRendererGridsHelper: ThreeDRendererGridsHelper;
   private _threeDRendererAxesHelper: ThreeDRendererAxesHelper;
-  private _threeDRendererInfiniteGridsHelper: ThreeDRendererInfiniteGridsHelper;
   private _threeDRendererCrossPointer: ThreeDRendererCrossPointer;
 
   // =======================================
@@ -35,23 +33,22 @@ export class ThreeDRendererHelpers
       ...DEFAULT_HELPERS_OPTIONS,
       ...initOptions,
     };
-    this._threeDRendererGridsHelper = new ThreeDRendererGridsHelper();
-    this._threeDRendererAxesHelper = new ThreeDRendererAxesHelper();
-    this._threeDRendererInfiniteGridsHelper =
-      new ThreeDRendererInfiniteGridsHelper(
-        threeDRendererCamera,
-        threeDRendererControls,
-        font,
-        options.infiniteGridsHelper
-      );
+    this._threeDRendererGridsHelper = new ThreeDRendererGridsHelper(
+      font,
+      threeDRendererCamera.position,
+      options.gridsHelper
+    );
+    this._threeDRendererAxesHelper = new ThreeDRendererAxesHelper(
+      threeDRendererControls.distanceToTarget,
+      options.axesHelper
+    );
     this._threeDRendererCrossPointer = new ThreeDRendererCrossPointer(
+      threeDRendererControls.distanceToTarget,
       options.crossPointer
     );
-    this.updateWithOptions(options);
     this.add(
       this._threeDRendererGridsHelper,
       this._threeDRendererAxesHelper,
-      this._threeDRendererInfiniteGridsHelper,
       this._threeDRendererCrossPointer
     );
   }
@@ -68,11 +65,6 @@ export class ThreeDRendererHelpers
     if (options.axesHelper !== undefined) {
       this._threeDRendererAxesHelper.updateWithOptions(options.axesHelper);
     }
-    if (options.infiniteGridsHelper !== undefined) {
-      this._threeDRendererInfiniteGridsHelper.updateWithOptions(
-        options.infiniteGridsHelper
-      );
-    }
     if (options.crossPointer !== undefined) {
       this._threeDRendererCrossPointer.updateWithOptions(options.crossPointer);
     }
@@ -86,9 +78,6 @@ export class ThreeDRendererHelpers
   }
   public get threeDRendererAxesHelper(): ThreeDRendererAxesHelper {
     return this._threeDRendererAxesHelper;
-  }
-  public get threeDRendererInfiniteGridsHelper(): ThreeDRendererInfiniteGridsHelper {
-    return this._threeDRendererInfiniteGridsHelper;
   }
   public get threeDRendererCrossPointer(): ThreeDRendererCrossPointer {
     return this._threeDRendererCrossPointer;
