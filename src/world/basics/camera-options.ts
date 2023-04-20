@@ -49,8 +49,8 @@ export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
   near: 0.1,
   far: 20000,
   position: {
-    x: 25,
-    y: 25,
+    x: -25,
+    y: -25,
     z: 25,
   },
   lookAt: {

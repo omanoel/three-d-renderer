@@ -13,7 +13,6 @@ export class ThreeDRendererRaycaster
   implements IConfigurable<ThreeDRendererRaycasterOptions>
 {
   private _isActive = true;
-  private _tickables: Object3D<Event>[] = [];
   /**
    * @param domContainer The DOM container
    * @param threeDRendererRenderer The renderer
@@ -62,6 +61,20 @@ export class ThreeDRendererRaycaster
       },
       false
     );
+    domContainer.ownerDocument.addEventListener(
+      "click",
+      (mouseEvent: MouseEvent) => {
+        if (this._isActive) {
+          this._handleMouseClick(
+            mouseEvent,
+            threeDRendererRenderer,
+            threeDRendererScene,
+            threeDRendererCamera
+          );
+        }
+      },
+      false
+    );
   }
 
   public handleMouseOver(_intersected: Intersection<Object3D>): void {
@@ -71,6 +84,9 @@ export class ThreeDRendererRaycaster
     // Empty here
   }
   public handleMouseDblClick(_intersected: Intersection<Object3D>): void {
+    // Empty here
+  }
+  public handleMouseClick(_intersected: Intersection<Object3D>): void {
     // Empty here
   }
   public updateWithOptions(
@@ -117,6 +133,23 @@ export class ThreeDRendererRaycaster
     }
   }
 
+  private _handleMouseClick(
+    mouseEvent: MouseEvent,
+    threeDRendererRenderer: ThreeDRendererRenderer,
+    threeDRendererScene: ThreeDRendererScene,
+    threeDRendererCamera: ThreeDRendererCamera
+  ): void {
+    const intersects = this._getRaycasterIntersections(
+      mouseEvent,
+      threeDRendererRenderer,
+      threeDRendererScene,
+      threeDRendererCamera
+    );
+    if (intersects.length > 0) {
+      this.handleMouseClick(intersects[0]);
+    }
+  }
+
   private _getRaycasterIntersections(
     mouseEvent: MouseEvent,
     threeDRendererRenderer: ThreeDRendererRenderer,
@@ -138,7 +171,12 @@ export class ThreeDRendererRaycaster
       1;
     this.setFromCamera(mouse, threeDRendererCamera);
     return this.intersectObjects(threeDRendererScene.children, true).filter(
-      (int) => int.object.type === "Mesh"
+      (int) => {
+        return (
+          (int.object as any).onMouseOver !== undefined ||
+          (int.object.parent as any).onMouseOver !== undefined
+        );
+      }
     );
   }
 }
