@@ -28,3 +28,8 @@ export interface ThreeDRendererCssAbsolutePosition {
   top: number;
   left: number;
 }
+
+export interface ThreeDRendererLabelOptions {
+  visible: boolean;
+  units: string;
+}
