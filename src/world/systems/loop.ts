@@ -1,17 +1,20 @@
 import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { ITickable } from "../../shared/i-tickable";
+import { ThreeDRendererCamera } from "../basics/camera";
+import { ThreeDRendererScene } from "../basics/scene";
+import { ThreeDRendererRenderer } from "./renderer";
 
 export class ThreeDRendererLoop {
   //
-  private _camera: PerspectiveCamera;
-  private _scene: Scene;
-  private _renderer: WebGLRenderer;
+  private _camera: ThreeDRendererCamera;
+  private _scene: ThreeDRendererScene;
+  private _renderer: ThreeDRendererRenderer;
   private _clock: Clock;
   private _tickables: ITickable[];
   constructor(
-    renderer: WebGLRenderer,
-    camera: PerspectiveCamera,
-    scene: Scene
+    renderer: ThreeDRendererRenderer,
+    camera: ThreeDRendererCamera,
+    scene: ThreeDRendererScene
   ) {
     this._camera = camera;
     this._scene = scene;
@@ -31,7 +34,7 @@ export class ThreeDRendererLoop {
       this.tick();
 
       // render a frame
-      this._renderer.render(this._scene, this._camera);
+      this.render();
     });
   }
   //
@@ -47,5 +50,10 @@ export class ThreeDRendererLoop {
     for (const object of this._tickables) {
       object.tick(delta);
     }
+  }
+
+  public render(): void {
+    // This method can be overriden in World
+    this._renderer.render(this._scene, this._camera);
   }
 }
