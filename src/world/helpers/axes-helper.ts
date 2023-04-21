@@ -1,18 +1,18 @@
-import { ArrowHelper, Group, Object3D, Vector3 } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { ArrowHelper, Group, Object3D, Vector3 } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererAxesHelperOptions,
   DEFAULT_AXES_HELPER_OPTIONS,
-} from "./axes-helper-options";
-import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
-import { AxisTypes } from "../../shared/i-options";
+} from './axes-helper-options';
+import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
+import { AxisTypes } from '../../shared/i-options';
 
 export class ThreeDRendererAxesHelper
   extends Group
   implements IConfigurable<ThreeDRendererAxesHelperOptions>
 {
   //
-  public static readonly AXIS_ARROW_NAME = "axis-arrow-";
+  public static readonly AXIS_ARROW_NAME = 'axis-arrow-';
   //
   private _originalDistanceToTarget: number;
   private _options: ThreeDRendererAxesHelperOptions;
@@ -41,7 +41,7 @@ export class ThreeDRendererAxesHelper
   ): void {
     if (options.x !== undefined) {
       const axisX = this.getObjectByName(
-        ThreeDRendererAxesHelper.AXIS_ARROW_NAME + "x"
+        ThreeDRendererAxesHelper.AXIS_ARROW_NAME + 'x'
       );
       if (axisX !== undefined) {
         //
@@ -62,12 +62,12 @@ export class ThreeDRendererAxesHelper
   // =======================================
   private _build(options: ThreeDRendererAxesHelperOptions): void {
     this.clear();
-    const axisArrowX = this._initAxisArrow("x");
-    const axisArrowY = this._initAxisArrow("y");
-    const axisArrowZ = this._initAxisArrow("z");
-    this._updateAxisArrowWithOptions(axisArrowX, options, "x");
-    this._updateAxisArrowWithOptions(axisArrowY, options, "y");
-    this._updateAxisArrowWithOptions(axisArrowZ, options, "z");
+    const axisArrowX = this._initAxisArrow('x');
+    const axisArrowY = this._initAxisArrow('y');
+    const axisArrowZ = this._initAxisArrow('z');
+    this._updateAxisArrowWithOptions(axisArrowX, options, 'x');
+    this._updateAxisArrowWithOptions(axisArrowY, options, 'y');
+    this._updateAxisArrowWithOptions(axisArrowZ, options, 'z');
     this.add(axisArrowX, axisArrowY, axisArrowZ);
   }
 
@@ -95,15 +95,15 @@ export class ThreeDRendererAxesHelper
   ): Vector3 {
     let direction: Vector3;
     switch (axis) {
-      case "x": {
+      case 'x': {
         direction = new Vector3(inverted ? -1 : 1, 0, 0);
         break;
       }
-      case "y": {
+      case 'y': {
         direction = new Vector3(0, inverted ? -1 : 1, 0);
         break;
       }
-      case "z": {
+      case 'z': {
         direction = new Vector3(0, 0, inverted ? -1 : 1);
         break;
       }

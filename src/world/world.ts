@@ -1,16 +1,23 @@
-import { GetOptionValueUtil } from "./../shared/utils/get-option-value-util";
-import { ThreeDRendererRenderer } from "./systems/renderer";
-import { ThreeDRendererWindowResizer } from "./systems/window-resizer";
-import { ThreeDRendererLoop } from "./systems/loop";
-import { InfoBox } from "./panels/info-box";
-import { Group, Intersection, Object3D } from "three";
-import { ThreeDRendererHelpers } from "./helpers/_helpers";
-import { ThreeDRendererComponents } from "./components/_components";
-import { ThreeDRendererBasics } from "./basics/_basics";
-import { Font } from "three/examples/jsm/loaders/FontLoader";
+import { Intersection, Object3D } from 'three';
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { GetOptionValueUtil } from './../shared/utils/get-option-value-util';
+import { ThreeDRendererBasics } from './basics/_basics';
+import { ThreeDRendererComponents } from './components/_components';
+import { ThreeDRendererHelpers } from './helpers/_helpers';
+import { InfoBox } from './panels/info-box';
+import jsonFont from './shared/fonts/optimer_bold.typeface.json';
+import { ThreeDRendererLoop } from './systems/loop';
+import { ThreeDRendererRenderer } from './systems/renderer';
+import { ThreeDRendererWindowResizer } from './systems/window-resizer';
+import { ThreeDRendererWorldApi } from './world-api';
+import {
+  DEFAULT_WORLD_OPTIONS,
+  ThreeDRendererWorldOptions,
+} from './world-options';
 
 export class ThreeDRendererWorld {
   //
+  private _api: ThreeDRendererWorldApi;
   private _threeDRendererRenderer: ThreeDRendererRenderer;
   private _threeDRendererBasics: ThreeDRendererBasics;
   private _loop: ThreeDRendererLoop;
@@ -18,21 +25,42 @@ export class ThreeDRendererWorld {
   private _threeDRendererComponents: ThreeDRendererComponents;
   private _infoBox: InfoBox;
   private _previousDistance: number;
+  private _options: ThreeDRendererWorldOptions;
   //
-  constructor(domContainer: HTMLDivElement, font: Font) {
+  constructor(
+    domContainer: HTMLDivElement,
+    initOptions?: Partial<ThreeDRendererWorldOptions>
+  ) {
+    // OPTIONS
+    this._options = {
+      ...DEFAULT_WORLD_OPTIONS,
+      ...initOptions,
+    };
+
+    // Default Font
+    const defaultFont = new Font(jsonFont);
+
+    // Renderer
     this._threeDRendererRenderer = new ThreeDRendererRenderer();
     domContainer.append(this._threeDRendererRenderer.domElement);
 
     // Basics
     this._threeDRendererBasics = new ThreeDRendererBasics(
       domContainer,
-      this._threeDRendererRenderer
+      this._threeDRendererRenderer,
+      this._options.basics
     );
+
+    // API
+    this._api = new ThreeDRendererWorldApi(this._threeDRendererBasics);
+
     // Helpers
     this._threeDRendererHelpers = new ThreeDRendererHelpers(
       this._threeDRendererBasics.threeDRendererCamera,
       this._threeDRendererBasics.threeDRendererControls,
-      font
+      defaultFont,
+      this._options.origin,
+      this._options.helpers
     );
     // Components
     this._threeDRendererComponents = new ThreeDRendererComponents();
@@ -57,7 +85,7 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererCamera,
       this._threeDRendererBasics.threeDRendererScene
     );
-    this._infoBox = new InfoBox(domContainer, "info");
+    this._infoBox = new InfoBox(domContainer, 'info');
   }
 
   public render(): void {
@@ -73,18 +101,17 @@ export class ThreeDRendererWorld {
   public stop(): void {
     this._loop.stop();
   }
-
-  public addComponents(): void {}
-
-  public addGroup(group: Group): void {
-    this._threeDRendererBasics.threeDRendererScene.add(group);
+  public get api(): ThreeDRendererWorldApi {
+    return this._api;
+  }
+  public get options(): ThreeDRendererWorldOptions {
+    return this._options;
   }
 
   private _handleEvents(): void {
     this._handleRaycasterMouseOver();
     this._handleRaycasterMouseOut();
     this._handleRaycasterMouseDblClick();
-    this._handleRaycasterMouseClick();
     this._handleControlsChange();
   }
 
@@ -95,7 +122,21 @@ export class ThreeDRendererWorld {
       this._threeDRendererHelpers.threeDRendererCrossPointer.display(
         intersected.point
       );
-      // this._threeDRendererRaycasterTip.display(intersected);
+      this._infoBox.setInnerHtml(
+        'Intersect at (' +
+          GetOptionValueUtil.getFixedValue(
+            intersected.point.x + this._options.origin.x
+          ) +
+          ' , ' +
+          GetOptionValueUtil.getFixedValue(
+            intersected.point.y + this._options.origin.y
+          ) +
+          ' , ' +
+          GetOptionValueUtil.getFixedValue(
+            intersected.point.z + this._options.origin.z
+          ) +
+          ')'
+      );
       this.render();
     };
   }
@@ -106,25 +147,9 @@ export class ThreeDRendererWorld {
       this.render();
     };
   }
-  private _handleRaycasterMouseClick(): void {
-    this._threeDRendererBasics.threeDRendererRaycaster.handleMouseClick = (
-      intersected: Intersection<Object3D>
-    ) => {
-      if ((intersected.object as any).onMouseClick !== undefined) {
-        (intersected.object as any).onMouseClick({
-          target: intersected.object,
-        });
-      }
-      if ((intersected.object as any).parent.onMouseClick !== undefined) {
-        (intersected.object as any).parent.onMouseClick({
-          target: intersected.object,
-        });
-      }
-    };
-  }
   private _handleRaycasterMouseDblClick(): void {
     this._threeDRendererBasics.threeDRendererRaycaster.handleMouseDblClick = (
-      intersected: Intersection<Object3D>
+      intersected: Intersection
     ) => {
       this._threeDRendererBasics.threeDRendererControls.enableDamping = true;
       this._threeDRendererBasics.threeDRendererControls.enabled = false;
@@ -144,12 +169,12 @@ export class ThreeDRendererWorld {
       const distance =
         this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
       this._infoBox.setInnerHtml(
-        "Distance: " +
+        'Distance: ' +
           GetOptionValueUtil.getFixedValue(distance) +
-          "<br>" +
-          "Count:" +
+          '<br>' +
+          'Count:' +
           this._threeDRendererBasics.threeDRendererScene.countObjects +
-          "<br>"
+          '<br>'
       );
       this._previousDistance =
         this._threeDRendererHelpers.threeDRendererGridsHelper.resize(

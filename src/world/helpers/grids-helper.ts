@@ -5,21 +5,21 @@ import {
   Mesh,
   MeshBasicMaterial,
   Vector3,
-} from "three";
-import { IConfigurable } from "../../shared/i-configurable";
-import {
-  ThreeDRendererGridsHelperOptions,
-  DEFAULT_GRIDS_HELPER_OPTIONS,
-  ThreeDRendererGridsHelperPlaneOptions,
-} from "./grids-helper-options";
-import { Font } from "three/examples/jsm/loaders/FontLoader";
+} from 'three';
 import {
   TextGeometry,
   TextGeometryParameters,
-} from "three/examples/jsm/geometries/TextGeometry";
-import { ITickable } from "../../shared/i-tickable";
-import { AxisTypes } from "../../shared/i-options";
-import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
+} from 'three/examples/jsm/geometries/TextGeometry';
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { AxisTypes } from '../../shared/i-options';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { ITickable } from '../../shared/interfaces/i-tickable';
+import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
+import {
+  DEFAULT_GRIDS_HELPER_OPTIONS,
+  ThreeDRendererGridsHelperOptions,
+  ThreeDRendererGridsHelperPlaneOptions,
+} from './grids-helper-options';
 
 export class ThreeDRendererGridsHelper
   extends Group
@@ -31,6 +31,7 @@ export class ThreeDRendererGridsHelper
   private _textMaterial: MeshBasicMaterial;
   private _idGroupLabels: number | undefined;
 
+  public tickable: true;
   // =======================================
   // CONSTRUCTOR
   // =======================================
@@ -40,6 +41,7 @@ export class ThreeDRendererGridsHelper
     initOptions?: Partial<ThreeDRendererGridsHelperOptions>
   ) {
     super();
+    this.tickable = true;
     const options = {
       ...DEFAULT_GRIDS_HELPER_OPTIONS,
       ...initOptions,
@@ -150,16 +152,16 @@ export class ThreeDRendererGridsHelper
     this._textParameter.height = this._options.size / 200;
     for (let d = 1; d <= this._options.divisions / 2; d++) {
       if (this._options.xLabel.visible) {
-        groupLabels.add(this._createLabel(d, "x", this._options.xLabel.units));
-        groupLabels.add(this._createLabel(-d, "x", this._options.xLabel.units));
+        groupLabels.add(this._createLabel(d, 'x', this._options.xLabel.units));
+        groupLabels.add(this._createLabel(-d, 'x', this._options.xLabel.units));
       }
       if (this._options.yLabel.visible) {
-        groupLabels.add(this._createLabel(d, "y", this._options.yLabel.units));
-        groupLabels.add(this._createLabel(-d, "y", this._options.yLabel.units));
+        groupLabels.add(this._createLabel(d, 'y', this._options.yLabel.units));
+        groupLabels.add(this._createLabel(-d, 'y', this._options.yLabel.units));
       }
       if (this._options.zLabel.visible) {
-        groupLabels.add(this._createLabel(d, "z", this._options.zLabel.units));
-        groupLabels.add(this._createLabel(-d, "z", this._options.zLabel.units));
+        groupLabels.add(this._createLabel(d, 'z', this._options.zLabel.units));
+        groupLabels.add(this._createLabel(-d, 'z', this._options.zLabel.units));
       }
     }
     this.add(groupLabels);
@@ -167,18 +169,18 @@ export class ThreeDRendererGridsHelper
 
   private _createLabel(value: number, axis: AxisTypes, unit?: string): Mesh {
     const labelPosText = GetOptionValueUtil.getFixedValue(
-      value * this._options.size
+      this._options.origin[axis] + value * this._options.size
     );
     const textGeometry = new TextGeometry(
-      labelPosText + (unit ? " " + unit : ""),
+      labelPosText + (unit ? ' ' + unit : ''),
       this._textParameter
     );
     const mesh = new Mesh(textGeometry, this._textMaterial);
-    if (axis === "x") {
+    if (axis === 'x') {
       mesh.position.set((value * this._options.size) / 10, 0, 0);
-    } else if (axis === "y") {
+    } else if (axis === 'y') {
       mesh.position.set(0, (value * this._options.size) / 10, 0);
-    } else if (axis === "z") {
+    } else if (axis === 'z') {
       mesh.position.set(0, 0, (value * this._options.size) / 10);
     }
     return mesh;

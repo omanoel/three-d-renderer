@@ -1,11 +1,11 @@
-import { Group } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererAmbientLight } from "./ambient-light";
-import { ThreeDRendererDirectionalLight } from "./directional-light";
+import { Group } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { ThreeDRendererAmbientLight } from './ambient-light';
+import { ThreeDRendererDirectionalLight } from './directional-light';
 import {
   ThreeDRendererComponentsOptions,
   DEFAULT_COMPONENTS_OPTIONS,
-} from "./_components-options";
+} from './_components-options';
 
 export class ThreeDRendererComponents
   extends Group

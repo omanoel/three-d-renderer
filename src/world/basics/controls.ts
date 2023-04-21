@@ -1,12 +1,12 @@
-import { PerspectiveCamera, Vector3 } from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { ITickable } from "../../shared/i-tickable";
-import { IConfigurable } from "../../shared/i-configurable";
+import { PerspectiveCamera, Vector3 } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { ITickable } from '../../shared/interfaces/i-tickable';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererControlsOptions,
   DEFAULT_CONTROLS_OPTIONS,
-} from "./controls-options";
-import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
+} from './controls-options';
+import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 
 export class ThreeDRendererControls
   extends OrbitControls
@@ -31,11 +31,11 @@ export class ThreeDRendererControls
     this.zoomSpeed = options.zoomSpeed;
     this.rotateSpeed = options.rotateSpeed;
     // this._controls.enableDamping = true;
-    this.addEventListener("change", () => {
+    this.addEventListener('change', () => {
       this.handleChange();
     });
     domContainer.ownerDocument.addEventListener(
-      "keydown",
+      'keydown',
       (event: KeyboardEvent) => this.handleKeyDown(event)
     );
   }

@@ -1,18 +1,21 @@
-import { Intersection, Object3D, Raycaster, Vector2 } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { Intersection, Raycaster, Vector2 } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererRaycasterOptions,
   DEFAULT_RAYCASTER_OPTIONS,
-} from "./raycaster-options";
-import { ThreeDRendererRenderer } from "../systems/renderer";
-import { ThreeDRendererScene } from "../basics/scene";
-import { ThreeDRendererCamera } from "../basics/camera";
+} from './raycaster-options';
+import { ThreeDRendererRenderer } from '../systems/renderer';
+import { ThreeDRendererScene } from '../basics/scene';
+import { ThreeDRendererCamera } from '../basics/camera';
 
 export class ThreeDRendererRaycaster
   extends Raycaster
   implements IConfigurable<ThreeDRendererRaycasterOptions>
 {
   private _isActive = true;
+  private _document: Document;
+  private _boundMouseMoveHandler: (mouseEvent: MouseEvent) => void;
+  private _boundMouseDblClickHandler: (mouseEvent: MouseEvent) => void;
   /**
    * @param domContainer The DOM container
    * @param threeDRendererRenderer The renderer
@@ -32,61 +35,47 @@ export class ThreeDRendererRaycaster
       ...DEFAULT_RAYCASTER_OPTIONS,
       ...initOptions,
     };
+    this._document = domContainer.ownerDocument;
     this._isActive = options.isActive;
-    domContainer.ownerDocument.addEventListener(
-      "mousemove",
-      (mouseEvent: MouseEvent) => {
-        if (this._isActive) {
-          this._handleMouseMove(
-            mouseEvent,
-            threeDRendererRenderer,
-            threeDRendererScene,
-            threeDRendererCamera
-          );
-        }
-      },
+    this._boundMouseMoveHandler = (mouseEvent: MouseEvent) => {
+      if (this._isActive) {
+        this._handleMouseMove(
+          mouseEvent,
+          threeDRendererRenderer,
+          threeDRendererScene,
+          threeDRendererCamera
+        );
+      }
+    };
+    this._boundMouseDblClickHandler = (mouseEvent: MouseEvent) => {
+      if (this._isActive) {
+        this._handleMouseDblClick(
+          mouseEvent,
+          threeDRendererRenderer,
+          threeDRendererScene,
+          threeDRendererCamera
+        );
+      }
+    };
+    this._document.addEventListener(
+      'mousemove',
+      this._boundMouseMoveHandler,
       false
     );
-    domContainer.ownerDocument.addEventListener(
-      "dblclick",
-      (mouseEvent: MouseEvent) => {
-        if (this._isActive) {
-          this._handleMouseDblClick(
-            mouseEvent,
-            threeDRendererRenderer,
-            threeDRendererScene,
-            threeDRendererCamera
-          );
-        }
-      },
-      false
-    );
-    domContainer.ownerDocument.addEventListener(
-      "click",
-      (mouseEvent: MouseEvent) => {
-        if (this._isActive) {
-          this._handleMouseClick(
-            mouseEvent,
-            threeDRendererRenderer,
-            threeDRendererScene,
-            threeDRendererCamera
-          );
-        }
-      },
+    this._document.addEventListener(
+      'dblclick',
+      this._boundMouseDblClickHandler,
       false
     );
   }
 
-  public handleMouseOver(_intersected: Intersection<Object3D>): void {
+  public handleMouseOver(_intersected: Intersection): void {
     // Empty here
   }
   public handleMouseOut(): void {
     // Empty here
   }
-  public handleMouseDblClick(_intersected: Intersection<Object3D>): void {
-    // Empty here
-  }
-  public handleMouseClick(_intersected: Intersection<Object3D>): void {
+  public handleMouseDblClick(_intersected: Intersection): void {
     // Empty here
   }
   public updateWithOptions(
@@ -95,6 +84,21 @@ export class ThreeDRendererRaycaster
     if (options.isActive !== undefined) {
       this._isActive = options.isActive;
     }
+  }
+  /**
+   * clear all event listeners
+   */
+  public dispose(): void {
+    this._document.removeEventListener(
+      'mousemove',
+      this._boundMouseMoveHandler,
+      false
+    );
+    this._document.removeEventListener(
+      'dblclick',
+      this._boundMouseDblClickHandler,
+      false
+    );
   }
 
   private _handleMouseMove(
@@ -133,29 +137,12 @@ export class ThreeDRendererRaycaster
     }
   }
 
-  private _handleMouseClick(
-    mouseEvent: MouseEvent,
-    threeDRendererRenderer: ThreeDRendererRenderer,
-    threeDRendererScene: ThreeDRendererScene,
-    threeDRendererCamera: ThreeDRendererCamera
-  ): void {
-    const intersects = this._getRaycasterIntersections(
-      mouseEvent,
-      threeDRendererRenderer,
-      threeDRendererScene,
-      threeDRendererCamera
-    );
-    if (intersects.length > 0) {
-      this.handleMouseClick(intersects[0]);
-    }
-  }
-
   private _getRaycasterIntersections(
     mouseEvent: MouseEvent,
     threeDRendererRenderer: ThreeDRendererRenderer,
     threeDRendererScene: ThreeDRendererScene,
     threeDRendererCamera: ThreeDRendererCamera
-  ): Array<Intersection<Object3D>> {
+  ): Intersection[] {
     const mouse = new Vector2();
     mouse.x =
       ((mouseEvent.clientX - threeDRendererRenderer.domElement.offsetLeft) /

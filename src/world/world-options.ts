@@ -1,19 +1,20 @@
+import { ThreeDRendererPositionOptions } from '../shared/i-options';
 import {
-  ThreeDRendererBasicsOptions,
   DEFAULT_BASICS_OPTIONS,
-} from "./basics/_basics-options";
+  ThreeDRendererBasicsOptions,
+} from './basics/_basics-options';
 import {
   DEFAULT_COMPONENTS_OPTIONS,
   ThreeDRendererComponentsOptions,
-} from "./components/_components-options";
+} from './components/_components-options';
 import {
-  ThreeDRendererHelpersOptions,
   DEFAULT_HELPERS_OPTIONS,
-} from "./helpers/_helpers-options";
+  ThreeDRendererHelpersOptions,
+} from './helpers/_helpers-options';
 import {
-  ThreeDRendererPanelsOptions,
   DEFAULT_PANELS_OPTIONS,
-} from "./panels/_panels-options";
+  ThreeDRendererPanelsOptions,
+} from './panels/_panels-options';
 
 /**
  * Represents the options available to alter the properties
@@ -24,6 +25,7 @@ export interface ThreeDRendererWorldOptions {
   helpers: ThreeDRendererHelpersOptions;
   panels: ThreeDRendererPanelsOptions;
   components: ThreeDRendererComponentsOptions;
+  origin: ThreeDRendererPositionOptions;
 }
 
 export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
@@ -31,4 +33,9 @@ export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
   helpers: DEFAULT_HELPERS_OPTIONS,
   panels: DEFAULT_PANELS_OPTIONS,
   components: DEFAULT_COMPONENTS_OPTIONS,
+  origin: {
+    x: 100,
+    y: 50,
+    z: 70,
+  },
 };

@@ -1,9 +1,9 @@
-import { AmbientLight, Color } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { AmbientLight, Color } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererAmbientLightOptions,
   DEFAULT_AMBIENT_LIGHT_OPTIONS,
-} from "./ambient-light-options";
+} from './ambient-light-options';
 
 export class ThreeDRendererAmbientLight
   extends AmbientLight

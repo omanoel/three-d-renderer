@@ -1,5 +1,5 @@
-import { WebGLRenderer } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { WebGLRenderer } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 
 export interface ThreeDRendererRendererOptions {
   antialias: boolean;

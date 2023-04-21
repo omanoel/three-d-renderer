@@ -5,19 +5,19 @@ import {
   Line,
   LineBasicMaterial,
   Vector3,
-} from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+} from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererCrossPointerOptions,
   DEFAULT_CROSS_POINTER_OPTIONS,
-} from "./cross-pointer-options";
+} from './cross-pointer-options';
 
 export class ThreeDRendererCrossPointer
   extends Group
   implements IConfigurable<ThreeDRendererCrossPointerOptions>
 {
   //
-  public static NAME = "CROSS_POINTER";
+  public static NAME = 'CROSS_POINTER';
   private _material: LineBasicMaterial;
   private _originalDistanceToTarget: number;
   private _lineLength: number;

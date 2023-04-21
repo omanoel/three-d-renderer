@@ -1,10 +1,12 @@
-import { ColorRepresentation } from "three";
+import { ColorRepresentation } from 'three';
 import {
   ThreeDRendererLabelOptions,
   ThreeDRendererObject3DOptions,
-} from "../../shared/i-options";
+  ThreeDRendererPositionOptions,
+} from '../../shared/i-options';
 
 export interface ThreeDRendererGridsHelperOptions {
+  origin: ThreeDRendererPositionOptions;
   divisions: number;
   size: number;
   xy: ThreeDRendererGridsHelperPlaneOptions;
@@ -22,23 +24,28 @@ export interface ThreeDRendererGridsHelperPlaneOptions
 }
 
 export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
+  origin: {
+    x: 0,
+    y: 0,
+    z: 0,
+  },
   divisions: 10,
   size: 10,
   xLabel: {
     visible: true,
-    units: "m",
+    units: 'm',
   },
   yLabel: {
     visible: true,
-    units: "m",
+    units: 'm',
   },
   zLabel: {
     visible: true,
-    units: "m",
+    units: 'm',
   },
   xy: {
     visible: true,
-    color: "grey",
+    color: 'grey',
     opacity: 0.5,
     position: {
       x: 0,
@@ -48,7 +55,7 @@ export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
   },
   xz: {
     visible: true,
-    color: "grey",
+    color: 'grey',
     opacity: 0.2,
     position: {
       x: 0,
@@ -58,7 +65,7 @@ export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
   },
   yz: {
     visible: true,
-    color: "grey",
+    color: 'grey',
     opacity: 0.2,
     position: {
       x: 0,

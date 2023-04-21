@@ -1,10 +1,10 @@
-import { PerspectiveCamera, Vector3 } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { PerspectiveCamera, Vector3 } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererCameraOptions,
   DEFAULT_CAMERA_OPTIONS,
-} from "./camera-options";
-import { GetOptionValueUtil } from "../../shared/utils/get-option-value-util";
+} from './camera-options';
+import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 
 export class ThreeDRendererCamera
   extends PerspectiveCamera

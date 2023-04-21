@@ -1,8 +1,8 @@
-import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { ITickable } from "../../shared/i-tickable";
-import { ThreeDRendererCamera } from "../basics/camera";
-import { ThreeDRendererScene } from "../basics/scene";
-import { ThreeDRendererRenderer } from "./renderer";
+import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { ITickable } from '../../shared/interfaces/i-tickable';
+import { ThreeDRendererCamera } from '../basics/camera';
+import { ThreeDRendererScene } from '../basics/scene';
+import { ThreeDRendererRenderer } from './renderer';
 
 export class ThreeDRendererLoop {
   //

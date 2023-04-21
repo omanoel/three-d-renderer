@@ -1,13 +1,14 @@
-import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererCamera } from "./camera";
-import { ThreeDRendererScene } from "./scene";
-import { ThreeDRendererControls } from "./controls";
+import { Group, Object3D } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { ThreeDRendererRenderer } from '../systems/renderer';
 import {
-  ThreeDRendererBasicsOptions,
   DEFAULT_BASICS_OPTIONS,
-} from "./_basics-options";
-import { ThreeDRendererRaycaster } from "./raycaster";
-import { ThreeDRendererRenderer } from "../systems/renderer";
+  ThreeDRendererBasicsOptions,
+} from './_basics-options';
+import { ThreeDRendererCamera } from './camera';
+import { ThreeDRendererControls } from './controls';
+import { ThreeDRendererRaycaster } from './raycaster';
+import { ThreeDRendererScene } from './scene';
 
 export class ThreeDRendererBasics
   implements IConfigurable<ThreeDRendererBasicsOptions>
@@ -67,6 +68,30 @@ export class ThreeDRendererBasics
     if (options.raycaster !== undefined) {
       this._threeDRendererRaycaster.updateWithOptions(options.raycaster);
     }
+  }
+
+  public addGroup(group: Group): void {
+    this._threeDRendererScene.addGroup(group);
+  }
+  public removeGroupById(id: number): void {
+    this._threeDRendererScene.removeGroupById(id);
+  }
+  public getGroupById(id: number): Object3D | undefined {
+    return this._threeDRendererScene.getGroupById(id);
+  }
+  public cleanScene(): void {
+    this._threeDRendererScene.cleanScene();
+  }
+  /**
+   * Remove all the event listeners.
+   */
+  public dispose(): void {
+    this._threeDRendererControls.dispose();
+    this._threeDRendererRaycaster.dispose();
+  }
+  public destroy(): void {
+    this.dispose();
+    this._threeDRendererScene.clear();
   }
 
   // =======================================

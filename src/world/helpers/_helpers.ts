@@ -1,15 +1,16 @@
-import { Group } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
-import { ThreeDRendererGridsHelper } from "./grids-helper";
-import { ThreeDRendererAxesHelper } from "./axes-helper";
+import { Group } from 'three';
+import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { ThreeDRendererPositionOptions } from '../../shared/i-options';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { ThreeDRendererCamera } from '../basics/camera';
+import { ThreeDRendererControls } from '../basics/controls';
 import {
-  ThreeDRendererHelpersOptions,
   DEFAULT_HELPERS_OPTIONS,
-} from "./_helpers-options";
-import { ThreeDRendererCamera } from "../basics/camera";
-import { ThreeDRendererControls } from "../basics/controls";
-import { Font } from "three/examples/jsm/loaders/FontLoader";
-import { ThreeDRendererCrossPointer } from "./cross-pointer";
+  ThreeDRendererHelpersOptions,
+} from './_helpers-options';
+import { ThreeDRendererAxesHelper } from './axes-helper';
+import { ThreeDRendererCrossPointer } from './cross-pointer';
+import { ThreeDRendererGridsHelper } from './grids-helper';
 
 export class ThreeDRendererHelpers
   extends Group
@@ -26,6 +27,7 @@ export class ThreeDRendererHelpers
     threeDRendererCamera: ThreeDRendererCamera,
     threeDRendererControls: ThreeDRendererControls,
     font: Font,
+    originPositionOptions: ThreeDRendererPositionOptions,
     initOptions?: Partial<ThreeDRendererHelpersOptions>
   ) {
     super();
@@ -33,6 +35,7 @@ export class ThreeDRendererHelpers
       ...DEFAULT_HELPERS_OPTIONS,
       ...initOptions,
     };
+    options.gridsHelper.origin = originPositionOptions;
     this._threeDRendererGridsHelper = new ThreeDRendererGridsHelper(
       font,
       threeDRendererCamera.position,

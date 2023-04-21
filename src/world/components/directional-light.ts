@@ -1,9 +1,9 @@
-import { Color, DirectionalLight } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { Color, DirectionalLight } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererDirectionalLightOptions,
   DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
-} from "./directional-light-options";
+} from './directional-light-options';
 
 export class ThreeDRendererDirectionalLight
   extends DirectionalLight

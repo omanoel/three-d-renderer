@@ -1,9 +1,9 @@
-import { Color, Object3D, Scene } from "three";
-import { IConfigurable } from "../../shared/i-configurable";
+import { Color, Group, Object3D, Scene } from 'three';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererSceneOptions,
   DEFAULT_SCENE_OPTIONS,
-} from "./scene-options";
+} from './scene-options';
 
 export class ThreeDRendererScene
   extends Scene
@@ -26,6 +26,20 @@ export class ThreeDRendererScene
 
   public get countObjects(): number {
     return this._countChildren(this);
+  }
+  public addGroup(group: Group): void {
+    this.add(group);
+  }
+  public getGroupById(id: number): Object3D | undefined {
+    return this.getObjectById(id);
+  }
+  public removeGroupById(id: number): void {
+    this.getObjectById(id)?.removeFromParent();
+  }
+  public cleanScene(): void {
+    this.children
+      .filter((c) => c.userData.cleanable !== undefined)
+      .forEach((c) => c.removeFromParent());
   }
 
   private _countChildren(obj: Object3D): number {
