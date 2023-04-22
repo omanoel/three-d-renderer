@@ -27,7 +27,7 @@ export class ThreeDRendererHelpers
     threeDRendererCamera: ThreeDRendererCamera,
     threeDRendererControls: ThreeDRendererControls,
     font: Font,
-    originPositionOptions: ThreeDRendererPositionOptions,
+    worldOrigin: ThreeDRendererPositionOptions,
     initOptions?: Partial<ThreeDRendererHelpersOptions>
   ) {
     super();
@@ -35,7 +35,7 @@ export class ThreeDRendererHelpers
       ...DEFAULT_HELPERS_OPTIONS,
       ...initOptions,
     };
-    options.gridsHelper.origin = originPositionOptions;
+    options.gridsHelper.worldOrigin = worldOrigin;
     this._threeDRendererGridsHelper = new ThreeDRendererGridsHelper(
       font,
       threeDRendererCamera.position,

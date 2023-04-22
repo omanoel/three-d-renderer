@@ -169,7 +169,8 @@ export class ThreeDRendererGridsHelper
 
   private _createLabel(value: number, axis: AxisTypes, unit?: string): Mesh {
     const labelPosText = GetOptionValueUtil.getFixedValue(
-      this._options.origin[axis] + value * this._options.size
+      this._options.worldOrigin[axis] +
+        (value * this._options.size) / this._options.divisions
     );
     const textGeometry = new TextGeometry(
       labelPosText + (unit ? ' ' + unit : ''),
@@ -177,11 +178,23 @@ export class ThreeDRendererGridsHelper
     );
     const mesh = new Mesh(textGeometry, this._textMaterial);
     if (axis === 'x') {
-      mesh.position.set((value * this._options.size) / 10, 0, 0);
+      mesh.position.set(
+        (value * this._options.size) / this._options.divisions,
+        0,
+        0
+      );
     } else if (axis === 'y') {
-      mesh.position.set(0, (value * this._options.size) / 10, 0);
+      mesh.position.set(
+        0,
+        (value * this._options.size) / this._options.divisions,
+        0
+      );
     } else if (axis === 'z') {
-      mesh.position.set(0, 0, (value * this._options.size) / 10);
+      mesh.position.set(
+        0,
+        0,
+        (value * this._options.size) / this._options.divisions
+      );
     }
     return mesh;
   }

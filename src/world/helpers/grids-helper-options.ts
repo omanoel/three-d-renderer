@@ -6,7 +6,7 @@ import {
 } from '../../shared/i-options';
 
 export interface ThreeDRendererGridsHelperOptions {
-  origin: ThreeDRendererPositionOptions;
+  worldOrigin: ThreeDRendererPositionOptions;
   divisions: number;
   size: number;
   xy: ThreeDRendererGridsHelperPlaneOptions;
@@ -24,13 +24,13 @@ export interface ThreeDRendererGridsHelperPlaneOptions
 }
 
 export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
-  origin: {
+  worldOrigin: {
     x: 0,
     y: 0,
     z: 0,
   },
   divisions: 10,
-  size: 10,
+  size: 100,
   xLabel: {
     visible: true,
     units: 'm',

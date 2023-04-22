@@ -1,5 +1,5 @@
-import { ColorRepresentation } from "three";
-import { ThreeDRendererObject3DOptions } from "../../shared/i-options";
+import { ColorRepresentation } from 'three';
+import { ThreeDRendererObject3DOptions } from '../../shared/i-options';
 
 /**
  * Represents the options available to alter the properties
@@ -66,7 +66,7 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       z: 0,
     },
     inverted: false,
-    color: "red",
+    color: 'red',
   },
   y: {
     visible: true,
@@ -76,7 +76,7 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       z: 0,
     },
     inverted: false,
-    color: "green",
+    color: 'green',
   },
   z: {
     visible: true,
@@ -85,7 +85,7 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       y: 0,
       z: 0,
     },
-    inverted: true,
-    color: "blue",
+    inverted: false,
+    color: 'blue',
   },
 };
