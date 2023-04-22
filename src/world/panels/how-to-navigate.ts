@@ -10,10 +10,10 @@ import {
 export class ThreeDRendererHowToNavigate
   implements IConfigurable<ThreeDRendererHowToNavigateOptions>
 {
-  public static HOW_TO_NAVIGATE_ID = 'HowToNavigate';
+  public static HOW_TO_NAVIGATE_ID = 'how-to-navigate';
 
   private static TEXT_FIELD_ID = 'TextField';
-  private static TITLE_ID = 'Title';
+  private static TITLE_ID = 'title';
   private static TITLE_CONTENT = 'How to use 3D display?';
 
   private _panel: HTMLDivElement;
@@ -31,6 +31,10 @@ export class ThreeDRendererHowToNavigate
       ...initOptions,
     };
     this._panel = domContainer.ownerDocument.createElement('div');
+    this._panel.setAttribute(
+      'id',
+      ThreeDRendererHowToNavigate.HOW_TO_NAVIGATE_ID
+    );
     domContainer.appendChild(this._panel);
     this._panel.style.position = 'absolute';
     this._panel.style.zIndex = '100';
@@ -162,7 +166,7 @@ export class ThreeDRendererHowToNavigate
     const title: HTMLDivElement = this._panel.ownerDocument.createElement('h2');
     title.setAttribute('id', ThreeDRendererHowToNavigate.TITLE_ID);
     title.style.textAlign = 'center';
-    title.style.color = 'rgb(105, 240, 174)';
+    title.style.color = 'rgb(0,0,0)';
     title.style.verticalAlign = 'middle';
     title.style.lineHeight = '10px';
 
@@ -249,6 +253,7 @@ export class ThreeDRendererHowToNavigate
         mouseEvent.stopPropagation();
       });
       button.addEventListener('mousedown', (mouseEvent: MouseEvent) => {
+        mouseEvent.preventDefault();
         const container: HTMLElement | null = button.parentElement;
         if (container) {
           container.style.visibility = 'hidden';

@@ -1,0 +1,44 @@
+.three-d-renderer-dialog-box {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border: 3px solid black;
+  box-shadow: 10px 5px 5px rgba(70, 70, 70, 0.4);
+  text-align: center;
+  background-color: rgba(120, 120, 120, 0.4);
+  z-index: 100;
+  top: 25%;
+  left: 25%;
+}
+
+.three-d-renderer-dialog-box h2 {
+  text-align: center;
+  vertical-align: middle;
+  line-height: 10px;
+  color: black;
+  font-family: tahoma;
+}
+
+.three-d-renderer-dialog-box p {
+  text-align: left;
+  color: gray;
+  font-family: tahoma;
+}
+
+.three-d-renderer-dialog-box button {
+  height: 25px;
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+  border: none;
+  color: white;
+  background-color: black;
+  text-align: center;
+  cursor: pointer;
+  font-family: tahoma;
+  font-size: 15px;
+}
+
+.three-d-renderer-dialog-box button:hover {
+  background-color: grey;
+}

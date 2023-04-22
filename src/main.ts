@@ -20,7 +20,15 @@ if (container != null) {
   document.getElementById('how-to-navigate-btn')?.addEventListener(
     'click',
     (mouseEvent: MouseEvent) => {
-      world.api.showHowToNavigate();
+      world.api.showHowToNavigateDialogBox();
+      mouseEvent.stopPropagation();
+    },
+    false
+  );
+  document.getElementById('dialog-box-btn')?.addEventListener(
+    'click',
+    (mouseEvent: MouseEvent) => {
+      world.api.showDialogBox('default');
       mouseEvent.stopPropagation();
     },
     false

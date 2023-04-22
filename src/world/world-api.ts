@@ -38,7 +38,13 @@ export class ThreeDRendererWorldApi {
   public resetView(): void {
     this._threeDRendererBasics.resetView();
   }
-  public showHowToNavigate(): void {
-    this._threeDRendererPanels.showHowToNavigate();
+  public showHowToNavigateDialogBox(): void {
+    this._threeDRendererPanels.showHowToNavigateDialogBox();
+  }
+  public showDialogBox(id: string): void {
+    this._threeDRendererPanels.showDialogBox(id);
+  }
+  public hideDialogBox(id: string): void {
+    this._threeDRendererPanels.hideDialogBox(id);
   }
 }
