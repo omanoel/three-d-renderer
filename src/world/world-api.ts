@@ -1,19 +1,29 @@
 import { Group, Object3D } from 'three';
 import { ThreeDRendererBasics } from './basics/_basics';
+import { ThreeDRendererHelpers } from './helpers/_helpers';
 import { ThreeDRendererPanels } from './panels/_panels';
+import { ThreeDRendererWorldOptions } from './world-options';
 
 export class ThreeDRendererWorldApi {
   private _threeDRendererBasics: ThreeDRendererBasics;
   private _threeDRendererPanels: ThreeDRendererPanels;
+  private _threeDRendererHelpers: ThreeDRendererHelpers;
   constructor(
     threeDRendererBasics: ThreeDRendererBasics,
-    threeDRendererPanels: ThreeDRendererPanels
+    threeDRendererPanels: ThreeDRendererPanels,
+    threeDRendererHelpers: ThreeDRendererHelpers
   ) {
     //
     this._threeDRendererBasics = threeDRendererBasics;
     this._threeDRendererPanels = threeDRendererPanels;
+    this._threeDRendererHelpers = threeDRendererHelpers;
   }
 
+  public updateWithOptions(options: ThreeDRendererWorldOptions): void {
+    this._threeDRendererBasics.updateWithOptions(options.basics);
+    this._threeDRendererPanels.updateWithOptions(options.panels);
+    this._threeDRendererHelpers.updateWithOptions(options.helpers);
+  }
   public addGroup(group: Group): void {
     this._threeDRendererBasics.addGroup(group);
   }
@@ -47,4 +57,5 @@ export class ThreeDRendererWorldApi {
   public hideDialogBox(id: string): void {
     this._threeDRendererPanels.hideDialogBox(id);
   }
+  public viewAll(): void {}
 }

@@ -25,7 +25,7 @@ export interface ThreeDRendererWorldOptions {
   helpers: ThreeDRendererHelpersOptions;
   panels: ThreeDRendererPanelsOptions;
   components: ThreeDRendererComponentsOptions;
-  origin: ThreeDRendererPositionOptions;
+  worldOrigin: ThreeDRendererPositionOptions;
 }
 
 export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
@@ -33,9 +33,9 @@ export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
   helpers: DEFAULT_HELPERS_OPTIONS,
   panels: DEFAULT_PANELS_OPTIONS,
   components: DEFAULT_COMPONENTS_OPTIONS,
-  origin: {
-    x: 100,
-    y: 50,
-    z: 70,
+  worldOrigin: {
+    x: -50,
+    y: 0,
+    z: 0,
   },
 };

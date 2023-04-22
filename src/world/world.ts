@@ -58,7 +58,7 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererCamera,
       this._threeDRendererBasics.threeDRendererControls,
       defaultFont,
-      this._options.origin,
+      this._options.worldOrigin,
       this._options.helpers
     );
     // Components
@@ -92,7 +92,8 @@ export class ThreeDRendererWorld {
     // API
     this._api = new ThreeDRendererWorldApi(
       this._threeDRendererBasics,
-      this._threeDRendererPanels
+      this._threeDRendererPanels,
+      this._threeDRendererHelpers
     );
   }
 
@@ -133,18 +134,19 @@ export class ThreeDRendererWorld {
       this._infoBox.setInnerHtml(
         'Intersect at (' +
           GetOptionValueUtil.getFixedValue(
-            intersected.point.x + this._options.origin.x
+            intersected.point.x + this._options.worldOrigin.x
           ) +
           ' , ' +
           GetOptionValueUtil.getFixedValue(
-            intersected.point.y + this._options.origin.y
+            intersected.point.y + this._options.worldOrigin.y
           ) +
           ' , ' +
           GetOptionValueUtil.getFixedValue(
-            intersected.point.z + this._options.origin.z
+            intersected.point.z + this._options.worldOrigin.z
           ) +
           ')'
       );
+      this._handleMouseOver(intersected.object);
       this.render();
     };
   }
@@ -152,6 +154,16 @@ export class ThreeDRendererWorld {
     this._threeDRendererBasics.threeDRendererRaycaster.handleMouseOut = () => {
       this._threeDRendererHelpers.threeDRendererCrossPointer.hide();
       // this._threeDRendererRaycasterTip.hide();
+      if (
+        this._threeDRendererBasics.threeDRendererRaycaster.intersected !==
+        undefined
+      ) {
+        this._handleMouseOut(
+          this._threeDRendererBasics.threeDRendererRaycaster.intersected.object
+        );
+      }
+      // this._threeDRendererBasics.threeDRendererRaycaster.intersected?.onMouseOut();
+      this._threeDRendererBasics.threeDRendererRaycaster.clearIntersected();
       this.render();
     };
   }
@@ -194,5 +206,23 @@ export class ThreeDRendererWorld {
       this._threeDRendererHelpers.threeDRendererAxesHelper.resize(distance);
       this.render();
     };
+  }
+  private _handleMouseOver(obj: Object3D): void {
+    if (obj.userData.onMouseOver !== undefined) {
+      obj.userData.onMouseOver();
+    } else {
+      if (obj.parent !== null) {
+        this._handleMouseOver(obj.parent);
+      }
+    }
+  }
+  private _handleMouseOut(obj: Object3D): void {
+    if (obj.userData.onMouseOut !== undefined) {
+      obj.userData.onMouseOut();
+    } else {
+      if (obj.parent !== null) {
+        this._handleMouseOut(obj.parent);
+      }
+    }
   }
 }
