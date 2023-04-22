@@ -4,7 +4,7 @@ import { ThreeDRendererDialogBoxOptions } from './dialog-box-options';
 export class ThreeDRendererDialogBoxUtil {
   private _dialogBoxes: Map<string, ThreeDRendererDialogBox> = new Map();
 
-  add(
+  public add(
     domContainer: HTMLDivElement,
     options: ThreeDRendererDialogBoxOptions
   ): ThreeDRendererDialogBox {
@@ -13,22 +13,22 @@ export class ThreeDRendererDialogBoxUtil {
     return dialogBox;
   }
 
-  get(id: string): ThreeDRendererDialogBox | undefined {
+  public get(id: string): ThreeDRendererDialogBox | undefined {
     return this._dialogBoxes.get(id);
   }
 
-  del(id: string): void {
+  public del(id: string): void {
     if (this._dialogBoxes.has(id)) {
       this._dialogBoxes.delete(id);
     }
   }
 
-  show(id: string): void {
+  public show(id: string): void {
     this._dialogBoxes.forEach((db) => db.hide());
     this.get(id)?.show();
   }
 
-  hide(id: string): void {
+  public hide(id: string): void {
     this.get(id)?.hide();
   }
 }
