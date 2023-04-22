@@ -1,12 +1,12 @@
 import { Intersection, Raycaster, Vector2 } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import {
-  ThreeDRendererRaycasterOptions,
-  DEFAULT_RAYCASTER_OPTIONS,
-} from './raycaster-options';
-import { ThreeDRendererRenderer } from '../systems/renderer';
-import { ThreeDRendererScene } from '../basics/scene';
 import { ThreeDRendererCamera } from '../basics/camera';
+import { ThreeDRendererScene } from '../basics/scene';
+import { ThreeDRendererRenderer } from '../systems/renderer';
+import {
+  DEFAULT_RAYCASTER_OPTIONS,
+  ThreeDRendererRaycasterOptions,
+} from './raycaster-options';
 
 export class ThreeDRendererRaycaster
   extends Raycaster
@@ -14,6 +14,7 @@ export class ThreeDRendererRaycaster
 {
   private _isActive = true;
   private _document: Document;
+  private _intersected: Intersection | undefined;
   private _boundMouseMoveHandler: (mouseEvent: MouseEvent) => void;
   private _boundMouseDblClickHandler: (mouseEvent: MouseEvent) => void;
   /**
@@ -101,6 +102,14 @@ export class ThreeDRendererRaycaster
     );
   }
 
+  public clearIntersected(): void {
+    this._intersected = undefined;
+  }
+
+  public get intersected(): Intersection | undefined {
+    return this._intersected;
+  }
+
   private _handleMouseMove(
     mouseEvent: MouseEvent,
     threeDRendererRenderer: ThreeDRendererRenderer,
@@ -114,6 +123,7 @@ export class ThreeDRendererRaycaster
       threeDRendererCamera
     );
     if (intersects.length > 0) {
+      this._intersected = intersects[0];
       this.handleMouseOver(intersects[0]);
     } else {
       this.handleMouseOut();
