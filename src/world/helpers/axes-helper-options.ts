@@ -1,12 +1,11 @@
 import { ColorRepresentation } from 'three';
-import { ThreeDRendererObject3DOptions } from '../../shared/i-options';
+import { SharedObject3DOptions } from '../../shared/i-options';
 
 /**
  * Represents the options available to alter the properties
  * of the AxisHelper (AxisArrow[]) object(s) rendered by the library
  */
-export interface ThreeDRendererAxesHelperOptions
-  extends ThreeDRendererObject3DOptions {
+export interface ThreeDRendererAxesHelperOptions extends SharedObject3DOptions {
   /**
    * Length of the Axis Arrow
    *
@@ -34,8 +33,7 @@ export interface ThreeDRendererAxesHelperOptions
  * Represents the options available to alter the properties
  * of the AxisArrow object rendered by the library
  */
-export interface ThreeDRendererAxisHelperOptions
-  extends ThreeDRendererObject3DOptions {
+export interface ThreeDRendererAxisHelperOptions extends SharedObject3DOptions {
   /**
    * Invert the Axis Arrow if true
    *

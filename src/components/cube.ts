@@ -1,27 +1,10 @@
-import { BoxGeometry, Group, Mesh, MeshPhongMaterial } from 'three';
-import { ICleanable } from '../shared/interfaces/i-cleanable';
-import { IClickable } from '../shared/interfaces/i-clickable';
-import { ITickable } from '../shared/interfaces/i-tickable';
-import { ComponentCubeEvent } from './cube-options';
+import { BoxGeometry, Mesh, MeshPhongMaterial } from 'three';
+import { AbstractTickableGroup } from '../shared/abstract-xxxxxable-group';
 
-export class ComponentCube
-  extends Group
-  implements IClickable<ComponentCubeEvent>, ITickable, ICleanable
-{
-  //
-  public cleanable: true;
-  public tickable: true;
-
+export class ComponentCube extends AbstractTickableGroup {
   constructor() {
     super();
-    this.cleanable = true;
-    this.tickable = true;
     this.name = 'Cube';
-    this.userData = {
-      onMouseOver: this.onMouseOver.bind(this),
-      onMouseOut: this.onMouseOut.bind(this),
-      cleanable: true,
-    };
     // create a geometry
     const geometry = new BoxGeometry(10, 10, 10);
     const material = new MeshPhongMaterial({
@@ -47,7 +30,7 @@ export class ComponentCube
     // specific behavior for update
     // (this.children[0] as any).material.wireframe = false;
   }
-  public onMouseClick(_event: ComponentCubeEvent): void {
-    // specific behavior for update
+  public onMouseDblClick(): void {
+    // specific behavior for update;
   }
 }

@@ -1,4 +1,4 @@
-import { ThreeDRendererPositionOptions } from '../shared/i-options';
+import { SharedPositionOptions } from '../shared/i-options';
 import {
   DEFAULT_BASICS_OPTIONS,
   ThreeDRendererBasicsOptions,
@@ -25,7 +25,7 @@ export interface ThreeDRendererWorldOptions {
   helpers: ThreeDRendererHelpersOptions;
   panels: ThreeDRendererPanelsOptions;
   components: ThreeDRendererComponentsOptions;
-  worldOrigin: ThreeDRendererPositionOptions;
+  worldOrigin: SharedPositionOptions;
 }
 
 export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {

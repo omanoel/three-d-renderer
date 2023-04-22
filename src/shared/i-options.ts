@@ -1,4 +1,4 @@
-export interface ThreeDRendererPositionOptions {
+export interface SharedPositionOptions {
   x: number;
   y: number;
   z: number;
@@ -8,7 +8,7 @@ export interface ThreeDRendererPositionOptions {
  * Represents the options available to alter the properties
  * of generic 3D Object rendered by the library
  */
-export interface ThreeDRendererObject3DOptions {
+export interface SharedObject3DOptions {
   /**
    * Object gets rendered if true. Default is true.
    *
@@ -19,17 +19,12 @@ export interface ThreeDRendererObject3DOptions {
    * Representing the object's local position.
    * Default is (0, 0, 0)
    */
-  position: ThreeDRendererPositionOptions;
+  position: SharedPositionOptions;
 }
 
-export type AxisTypes = "x" | "y" | "z";
+export type SharedAxisTypes = 'x' | 'y' | 'z';
 
-export interface ThreeDRendererCssAbsolutePosition {
-  top: number;
-  left: number;
-}
-
-export interface ThreeDRendererLabelOptions {
+export interface SharedLabelOptions {
   visible: boolean;
   units: string;
 }

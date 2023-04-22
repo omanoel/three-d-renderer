@@ -1,6 +1,6 @@
 import { Group } from 'three';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
-import { ThreeDRendererPositionOptions } from '../../shared/i-options';
+import { SharedPositionOptions } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import { ThreeDRendererCamera } from '../basics/camera';
 import { ThreeDRendererControls } from '../basics/controls';
@@ -27,7 +27,7 @@ export class ThreeDRendererHelpers
     threeDRendererCamera: ThreeDRendererCamera,
     threeDRendererControls: ThreeDRendererControls,
     font: Font,
-    worldOrigin: ThreeDRendererPositionOptions,
+    worldOrigin: SharedPositionOptions,
     initOptions?: Partial<ThreeDRendererHelpersOptions>
   ) {
     super();

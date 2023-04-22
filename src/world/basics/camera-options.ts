@@ -1,4 +1,4 @@
-import { ThreeDRendererPositionOptions } from "../../shared/i-options";
+import { SharedPositionOptions } from '../../shared/i-options';
 
 /**
  * Represents the options available to alter the properties
@@ -34,13 +34,13 @@ export interface ThreeDRendererCameraOptions {
    *
    * @defaultValue (25, 25, 25)
    */
-  position: ThreeDRendererPositionOptions;
+  position: SharedPositionOptions;
   /**
    * Representing the camera's initial target point.
    *
    * @efaultValue (0, 0, 0)
    */
-  lookAt: ThreeDRendererPositionOptions;
+  lookAt: SharedPositionOptions;
 }
 
 export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {

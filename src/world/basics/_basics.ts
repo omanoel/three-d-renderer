@@ -96,6 +96,10 @@ export class ThreeDRendererBasics
   }
   public resetView(): void {
     this._threeDRendererControls.reset();
+    this._threeDRendererControls.dispatchEvent({
+      type: 'change',
+      target: this._threeDRendererControls,
+    });
   }
   public focusView(): void {
     const minMax = SharedBoundingBoxUtil.computeFromObjects(

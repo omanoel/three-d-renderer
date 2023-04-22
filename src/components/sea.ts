@@ -1,13 +1,11 @@
-import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from 'three';
-import { ICleanable } from '../shared/interfaces/i-cleanable';
+import { BoxGeometry, Mesh, MeshLambertMaterial } from 'three';
+import { AbstractCleanableGroup } from '../shared/abstract-xxxxxable-group';
 
-export class ComponentSea extends Group implements ICleanable {
+export class ComponentSea extends AbstractCleanableGroup {
   //
-  public cleanable: true;
 
   constructor() {
     super();
-    this.cleanable = true;
     this.name = 'Cube';
     // create a geometry
     const geometry = new BoxGeometry(20, 20, 2);

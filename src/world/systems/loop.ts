@@ -1,5 +1,4 @@
-import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import { ITickable } from '../../shared/interfaces/i-tickable';
+import { Clock } from 'three';
 import { ThreeDRendererCamera } from '../basics/camera';
 import { ThreeDRendererScene } from '../basics/scene';
 import { ThreeDRendererRenderer } from './renderer';
@@ -10,7 +9,6 @@ export class ThreeDRendererLoop {
   private _scene: ThreeDRendererScene;
   private _renderer: ThreeDRendererRenderer;
   private _clock: Clock;
-  private _tickables: ITickable[];
   constructor(
     renderer: ThreeDRendererRenderer,
     camera: ThreeDRendererCamera,
@@ -20,11 +18,6 @@ export class ThreeDRendererLoop {
     this._scene = scene;
     this._renderer = renderer;
     this._clock = new Clock();
-    this._tickables = [];
-  }
-  //
-  public get tickables(): ITickable[] {
-    return this._tickables;
   }
   //
   public start(): void {
@@ -47,8 +40,8 @@ export class ThreeDRendererLoop {
     // only call the getDelta function once per frame!
     const delta = this._clock.getDelta();
     // Code to update animations will go here
-    for (const object of this._tickables) {
-      object.tick(delta);
+    for (const object of this._scene.tickableObjects) {
+      object.userData.tick(delta);
     }
   }
 

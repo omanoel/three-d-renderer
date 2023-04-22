@@ -1,11 +1,11 @@
 import { ArrowHelper, Group, Object3D, Vector3 } from 'three';
+import { SharedAxisTypes } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import {
-  ThreeDRendererAxesHelperOptions,
-  DEFAULT_AXES_HELPER_OPTIONS,
-} from './axes-helper-options';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
-import { AxisTypes } from '../../shared/i-options';
+import {
+  DEFAULT_AXES_HELPER_OPTIONS,
+  ThreeDRendererAxesHelperOptions,
+} from './axes-helper-options';
 
 export class ThreeDRendererAxesHelper
   extends Group
@@ -72,7 +72,7 @@ export class ThreeDRendererAxesHelper
   }
 
   private _initAxisArrow(
-    axis: keyof Pick<ThreeDRendererAxesHelperOptions, AxisTypes>
+    axis: keyof Pick<ThreeDRendererAxesHelperOptions, SharedAxisTypes>
   ): ArrowHelper {
     const arrowOptions = DEFAULT_AXES_HELPER_OPTIONS[axis];
     const arrow = new ArrowHelper(
@@ -90,7 +90,7 @@ export class ThreeDRendererAxesHelper
   }
 
   private _getAxisArrowDirection(
-    axis: keyof Pick<ThreeDRendererAxesHelperOptions, AxisTypes>,
+    axis: keyof Pick<ThreeDRendererAxesHelperOptions, SharedAxisTypes>,
     inverted: boolean
   ): Vector3 {
     let direction: Vector3;
@@ -116,7 +116,7 @@ export class ThreeDRendererAxesHelper
     axisHelperOptions: Partial<ThreeDRendererAxesHelperOptions>,
     axisArrowOptionsAttributeName: keyof Pick<
       ThreeDRendererAxesHelperOptions,
-      AxisTypes
+      SharedAxisTypes
     >
   ): void {
     const axisArrowOptions = axisHelperOptions[axisArrowOptionsAttributeName];

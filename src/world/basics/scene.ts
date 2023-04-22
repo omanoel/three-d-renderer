@@ -30,6 +30,9 @@ export class ThreeDRendererScene
   public get cleanableObjects(): Object3D[] {
     return this.children.filter((c) => c.userData.cleanable !== undefined);
   }
+  public get tickableObjects(): Object3D[] {
+    return this.children.filter((c) => c.userData.tickable !== undefined);
+  }
   public addGroup(group: Group): void {
     this.add(group);
   }

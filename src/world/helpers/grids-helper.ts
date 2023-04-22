@@ -11,9 +11,8 @@ import {
   TextGeometryParameters,
 } from 'three/examples/jsm/geometries/TextGeometry';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
-import { AxisTypes } from '../../shared/i-options';
+import { SharedAxisTypes } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import { ITickable } from '../../shared/interfaces/i-tickable';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
   DEFAULT_GRIDS_HELPER_OPTIONS,
@@ -23,7 +22,7 @@ import {
 
 export class ThreeDRendererGridsHelper
   extends Group
-  implements IConfigurable<ThreeDRendererGridsHelperOptions>, ITickable
+  implements IConfigurable<ThreeDRendererGridsHelperOptions>
 {
   private _options: ThreeDRendererGridsHelperOptions;
   private _font: Font;
@@ -79,10 +78,6 @@ export class ThreeDRendererGridsHelper
       this._options.xy = options.xy;
     }
     this._buildGridsHelper();
-  }
-
-  public tick(delta: number): void {
-    // ???
   }
 
   public resize(
@@ -167,7 +162,11 @@ export class ThreeDRendererGridsHelper
     this.add(groupLabels);
   }
 
-  private _createLabel(value: number, axis: AxisTypes, unit?: string): Mesh {
+  private _createLabel(
+    value: number,
+    axis: SharedAxisTypes,
+    unit?: string
+  ): Mesh {
     const labelPosText = GetOptionValueUtil.getFixedValue(
       this._options.worldOrigin[axis] +
         (value * this._options.size) / this._options.divisions

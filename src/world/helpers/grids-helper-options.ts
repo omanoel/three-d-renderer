@@ -1,24 +1,24 @@
 import { ColorRepresentation } from 'three';
 import {
-  ThreeDRendererLabelOptions,
-  ThreeDRendererObject3DOptions,
-  ThreeDRendererPositionOptions,
+  SharedLabelOptions,
+  SharedObject3DOptions,
+  SharedPositionOptions,
 } from '../../shared/i-options';
 
 export interface ThreeDRendererGridsHelperOptions {
-  worldOrigin: ThreeDRendererPositionOptions;
+  worldOrigin: SharedPositionOptions;
   divisions: number;
   size: number;
   xy: ThreeDRendererGridsHelperPlaneOptions;
   xz: ThreeDRendererGridsHelperPlaneOptions;
   yz: ThreeDRendererGridsHelperPlaneOptions;
-  xLabel: ThreeDRendererLabelOptions;
-  yLabel: ThreeDRendererLabelOptions;
-  zLabel: ThreeDRendererLabelOptions;
+  xLabel: SharedLabelOptions;
+  yLabel: SharedLabelOptions;
+  zLabel: SharedLabelOptions;
 }
 
 export interface ThreeDRendererGridsHelperPlaneOptions
-  extends ThreeDRendererObject3DOptions {
+  extends SharedObject3DOptions {
   color: ColorRepresentation;
   opacity: number;
 }
