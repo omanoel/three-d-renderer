@@ -1,12 +1,12 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { ITickable } from '../../shared/interfaces/i-tickable';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import {
-  ThreeDRendererControlsOptions,
-  DEFAULT_CONTROLS_OPTIONS,
-} from './controls-options';
+import { ITickable } from '../../shared/interfaces/i-tickable';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
+import {
+  DEFAULT_CONTROLS_OPTIONS,
+  ThreeDRendererControlsOptions,
+} from './controls-options';
 
 export class ThreeDRendererControls
   extends OrbitControls
@@ -14,6 +14,7 @@ export class ThreeDRendererControls
 {
   //
   private _resetKey: string;
+  public tickable: true;
 
   constructor(
     camera: PerspectiveCamera,
@@ -21,6 +22,7 @@ export class ThreeDRendererControls
     initOptions?: Partial<ThreeDRendererControlsOptions>
   ) {
     super(camera, domContainer);
+    this.tickable = true;
     const options = {
       ...DEFAULT_CONTROLS_OPTIONS,
       ...initOptions,

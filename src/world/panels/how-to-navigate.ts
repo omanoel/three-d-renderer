@@ -1,11 +1,11 @@
 import { ColorRepresentation } from 'three';
 
+import { ThreeDRendererCssAbsolutePosition } from '../../shared/i-options';
+import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   DEFAULT_HOWTONAVIGATE_OPTIONS,
   ThreeDRendererHowToNavigateOptions,
 } from './how-to-navigate-options';
-import { ThreeDRendererCssAbsolutePosition } from '../../shared/i-options';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
 
 export class ThreeDRendererHowToNavigate
   implements IConfigurable<ThreeDRendererHowToNavigateOptions>
@@ -31,10 +31,7 @@ export class ThreeDRendererHowToNavigate
       ...initOptions,
     };
     this._panel = domContainer.ownerDocument.createElement('div');
-    this._panel.setAttribute(
-      'id',
-      ThreeDRendererHowToNavigate.HOW_TO_NAVIGATE_ID
-    );
+    domContainer.appendChild(this._panel);
     this._panel.style.position = 'absolute';
     this._panel.style.zIndex = '100';
     this._panel.style.backgroundColor = 'rgba(120, 120, 120, 0.4)';
@@ -48,7 +45,7 @@ export class ThreeDRendererHowToNavigate
     this._addTitle();
     this._addTextField();
     this._addCloseButtons();
-    domContainer.appendChild(this._panel);
+    this.updateWithOptions(options);
   }
 
   /**
@@ -67,63 +64,61 @@ export class ThreeDRendererHowToNavigate
   }
 
   /**
+   * Method to show the helper.
+   */
+  public hide(): void {
+    this._panel.style.visibility = 'hidden';
+  }
+
+  /**
    * Set the HowToNavigate options.
    * @param howToNavigateOptions the HowToNavigate options
    */
   public updateWithOptions(
     howToNavigateOptions: Partial<ThreeDRendererHowToNavigateOptions>
   ) {
-    if (howToNavigateOptions !== undefined) {
+    if (howToNavigateOptions.titleColor !== undefined) {
       this._setProperty(
         ThreeDRendererHowToNavigate.TITLE_ID,
         'color',
         howToNavigateOptions.titleColor
       );
+    }
+    if (howToNavigateOptions.textColor !== undefined) {
       this._setProperty(
         ThreeDRendererHowToNavigate.TEXT_FIELD_ID,
         'color',
         howToNavigateOptions.textColor
       );
+    }
+    if (howToNavigateOptions.opacity !== undefined) {
       this._setProperty(
         ThreeDRendererHowToNavigate.HOW_TO_NAVIGATE_ID,
         'opacity',
         howToNavigateOptions.opacity
       );
-
+    }
+    if (howToNavigateOptions.textContent !== undefined) {
       this._setInnerHtml(
         ThreeDRendererHowToNavigate.TEXT_FIELD_ID,
         howToNavigateOptions.textContent
       );
-      this._setLocation(
-        ThreeDRendererHowToNavigate.HOW_TO_NAVIGATE_ID,
-        howToNavigateOptions.absolutePosition
-      );
+    }
+    if (howToNavigateOptions.absolutePosition !== undefined) {
+      this._setLocation(howToNavigateOptions.absolutePosition);
     }
   }
 
-  private _setLocation(
-    elementID: string,
-    location?: ThreeDRendererCssAbsolutePosition
-  ): void {
-    if (location != undefined) {
-      const navigateHelper: HTMLElement | null =
-        this._panel.ownerDocument.getElementById(
-          ThreeDRendererHowToNavigate.HOW_TO_NAVIGATE_ID
-        );
-      if (navigateHelper != null) {
-        const parent: HTMLElement | null = navigateHelper.parentElement;
-        let leftLocation: number = location.left;
-        let topLocation: number = location.top;
+  private _setLocation(location: ThreeDRendererCssAbsolutePosition): void {
+    let leftLocation: number = location.left;
+    let topLocation: number = location.top;
 
-        if (parent != null) {
-          leftLocation += parent.getBoundingClientRect().left;
-          topLocation += parent.getBoundingClientRect().top;
-        }
-
-        this._setProperty(elementID, 'left', leftLocation.toString() + 'px');
-        this._setProperty(elementID, 'top', topLocation.toString() + 'px');
-      }
+    if (this._panel.parentElement !== null) {
+      leftLocation += this._panel.parentElement.getBoundingClientRect().left;
+      topLocation += this._panel.parentElement.getBoundingClientRect().top;
     }
+    this._panel.style.top = topLocation.toString() + 'px';
+    this._panel.style.left = leftLocation.toString() + 'px';
   }
 
   private _setProperty(
@@ -201,7 +196,7 @@ export class ThreeDRendererHowToNavigate
   }
 
   private _addCloseButtons(): void {
-    const buttonCross = this._createButton();
+    const buttonCross = this._createButton('close-cross');
     buttonCross.style.width = '20px';
     buttonCross.style.height = '20px';
     buttonCross.style.maxWidth = '20px';
@@ -211,26 +206,26 @@ export class ThreeDRendererHowToNavigate
     buttonCross.style.marginRight = '2px';
     buttonCross.style.top = '0';
     buttonCross.style.right = '0';
-    buttonCross.style.backgroundImage =
-      'url("example/assets/images/close.png")';
+    buttonCross.style.backgroundImage = 'url( /assets/images/close.png")';
     buttonCross.style.backgroundSize = '100% 100%';
+    this._panel.appendChild(buttonCross);
+    this._setListeners('close-cross');
 
-    const buttonClose = this._createButton();
+    const buttonClose = this._createButton('close-text');
     buttonClose.innerHTML = 'Close';
     buttonClose.style.width = '50px';
     buttonClose.style.height = '25px';
     buttonClose.style.position = 'absolute';
     buttonClose.style.bottom = '5px';
     buttonClose.style.right = '8px';
-
-    this._panel.appendChild(buttonCross);
     this._panel.appendChild(buttonClose);
+    this._setListeners('close-text');
   }
 
-  private _createButton(): HTMLButtonElement {
+  private _createButton(id: string): HTMLButtonElement {
     const button: HTMLButtonElement =
       this._panel.ownerDocument.createElement('button');
-
+    button.setAttribute('id', id);
     button.style.border = 'none';
     button.style.color = 'white';
     button.style.backgroundColor = 'rgba(0, 0, 0, 0)';
@@ -239,20 +234,27 @@ export class ThreeDRendererHowToNavigate
     button.style.fontFamily = 'tahoma';
     button.style.fontSize = '15px';
 
-    button.addEventListener('mouseover', function handleMouseOver() {
-      this.style.backgroundColor = 'rgba(100, 100, 100, 0.5)';
-    });
-    button.addEventListener('mouseleave', function handleMouseLeave() {
-      this.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-    });
-
-    button.addEventListener('click', function handleClick() {
-      const container: HTMLElement | null = this.parentElement;
-      if (container) {
-        container.style.visibility = 'hidden';
-      }
-    });
-
     return button;
+  }
+
+  private _setListeners(id: string): void {
+    const button = this._panel.ownerDocument.getElementById(id);
+    if (button !== null) {
+      button.addEventListener('mouseover', (mouseEvent: MouseEvent) => {
+        button.style.backgroundColor = 'rgba(100, 100, 100, 0.5)';
+        mouseEvent.stopPropagation();
+      });
+      button.addEventListener('mouseleave', (mouseEvent: MouseEvent) => {
+        button.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        mouseEvent.stopPropagation();
+      });
+      button.addEventListener('mousedown', (mouseEvent: MouseEvent) => {
+        const container: HTMLElement | null = button.parentElement;
+        if (container) {
+          container.style.visibility = 'hidden';
+        }
+        mouseEvent.stopPropagation();
+      });
+    }
   }
 }

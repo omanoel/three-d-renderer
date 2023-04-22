@@ -93,6 +93,9 @@ export class ThreeDRendererBasics
     this.dispose();
     this._threeDRendererScene.clear();
   }
+  public resetView(): void {
+    this._threeDRendererControls.reset();
+  }
 
   // =======================================
   // GETTER

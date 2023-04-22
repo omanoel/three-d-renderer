@@ -1,11 +1,17 @@
 import { Group, Object3D } from 'three';
 import { ThreeDRendererBasics } from './basics/_basics';
+import { ThreeDRendererPanels } from './panels/_panels';
 
 export class ThreeDRendererWorldApi {
   private _threeDRendererBasics: ThreeDRendererBasics;
-  constructor(threeDRendererBasics: ThreeDRendererBasics) {
+  private _threeDRendererPanels: ThreeDRendererPanels;
+  constructor(
+    threeDRendererBasics: ThreeDRendererBasics,
+    threeDRendererPanels: ThreeDRendererPanels
+  ) {
     //
     this._threeDRendererBasics = threeDRendererBasics;
+    this._threeDRendererPanels = threeDRendererPanels;
   }
 
   public addGroup(group: Group): void {
@@ -28,5 +34,11 @@ export class ThreeDRendererWorldApi {
   }
   public destroy(): void {
     this._threeDRendererBasics.destroy();
+  }
+  public resetView(): void {
+    this._threeDRendererBasics.resetView();
+  }
+  public showHowToNavigate(): void {
+    this._threeDRendererPanels.showHowToNavigate();
   }
 }

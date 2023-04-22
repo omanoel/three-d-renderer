@@ -4,6 +4,7 @@ import { GetOptionValueUtil } from './../shared/utils/get-option-value-util';
 import { ThreeDRendererBasics } from './basics/_basics';
 import { ThreeDRendererComponents } from './components/_components';
 import { ThreeDRendererHelpers } from './helpers/_helpers';
+import { ThreeDRendererPanels } from './panels/_panels';
 import { InfoBox } from './panels/info-box';
 import jsonFont from './shared/fonts/optimer_bold.typeface.json';
 import { ThreeDRendererLoop } from './systems/loop';
@@ -20,9 +21,10 @@ export class ThreeDRendererWorld {
   private _api: ThreeDRendererWorldApi;
   private _threeDRendererRenderer: ThreeDRendererRenderer;
   private _threeDRendererBasics: ThreeDRendererBasics;
-  private _loop: ThreeDRendererLoop;
   private _threeDRendererHelpers: ThreeDRendererHelpers;
   private _threeDRendererComponents: ThreeDRendererComponents;
+  private _threeDRendererPanels: ThreeDRendererPanels;
+  private _loop: ThreeDRendererLoop;
   private _infoBox: InfoBox;
   private _previousDistance: number;
   private _options: ThreeDRendererWorldOptions;
@@ -50,9 +52,6 @@ export class ThreeDRendererWorld {
       this._threeDRendererRenderer,
       this._options.basics
     );
-
-    // API
-    this._api = new ThreeDRendererWorldApi(this._threeDRendererBasics);
 
     // Helpers
     this._threeDRendererHelpers = new ThreeDRendererHelpers(
@@ -86,6 +85,15 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererScene
     );
     this._infoBox = new InfoBox(domContainer, 'info');
+    this._threeDRendererPanels = new ThreeDRendererPanels(
+      domContainer,
+      this.options.panels
+    );
+    // API
+    this._api = new ThreeDRendererWorldApi(
+      this._threeDRendererBasics,
+      this._threeDRendererPanels
+    );
   }
 
   public render(): void {
