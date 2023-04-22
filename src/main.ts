@@ -46,6 +46,14 @@ if (container != null) {
     },
     false
   );
+  document.getElementById('focus-view-btn')?.addEventListener(
+    'click',
+    (mouseEvent: MouseEvent) => {
+      world.api.focusView();
+      mouseEvent.stopPropagation();
+    },
+    false
+  );
   document.getElementById('options-btn')?.addEventListener(
     'click',
     (mouseEvent: MouseEvent) => {

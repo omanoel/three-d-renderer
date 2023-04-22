@@ -1,8 +1,8 @@
 import { Color, Group, Object3D, Scene } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
-  ThreeDRendererSceneOptions,
   DEFAULT_SCENE_OPTIONS,
+  ThreeDRendererSceneOptions,
 } from './scene-options';
 
 export class ThreeDRendererScene
@@ -25,7 +25,10 @@ export class ThreeDRendererScene
   }
 
   public get countObjects(): number {
-    return this._countChildren(this);
+    return this._countObjects(this);
+  }
+  public get cleanableObjects(): Object3D[] {
+    return this.children.filter((c) => c.userData.cleanable !== undefined);
   }
   public addGroup(group: Group): void {
     this.add(group);
@@ -37,15 +40,13 @@ export class ThreeDRendererScene
     this.getObjectById(id)?.removeFromParent();
   }
   public cleanScene(): void {
-    this.children
-      .filter((c) => c.userData.cleanable !== undefined)
-      .forEach((c) => c.removeFromParent());
+    this.cleanableObjects.forEach((c) => c.removeFromParent());
   }
 
-  private _countChildren(obj: Object3D): number {
+  private _countObjects(obj: Object3D): number {
     let z = 1;
     obj.children.forEach((c: Object3D) => {
-      z += this._countChildren(c);
+      z += this._countObjects(c);
     });
     return z;
   }

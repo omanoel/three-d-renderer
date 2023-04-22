@@ -34,7 +34,7 @@ export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
   panels: DEFAULT_PANELS_OPTIONS,
   components: DEFAULT_COMPONENTS_OPTIONS,
   worldOrigin: {
-    x: -50,
+    x: 0,
     y: 0,
     z: 0,
   },

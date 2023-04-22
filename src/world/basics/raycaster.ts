@@ -1,5 +1,6 @@
 import { Intersection, Raycaster, Vector2 } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { FindObjectUtil } from '../../shared/utils/find-object-util';
 import { ThreeDRendererCamera } from '../basics/camera';
 import { ThreeDRendererScene } from '../basics/scene';
 import { ThreeDRendererRenderer } from '../systems/renderer';
@@ -169,10 +170,7 @@ export class ThreeDRendererRaycaster
     this.setFromCamera(mouse, threeDRendererCamera);
     return this.intersectObjects(threeDRendererScene.children, true).filter(
       (int) => {
-        return (
-          (int.object as any).onMouseOver !== undefined ||
-          (int.object.parent as any).onMouseOver !== undefined
-        );
+        return FindObjectUtil.findMethodMouseOver(int.object) !== undefined;
       }
     );
   }

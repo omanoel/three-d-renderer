@@ -21,5 +21,6 @@ export const DEFAULT_HOWTONAVIGATE_OPTIONS: ThreeDRendererDialogBoxOptions = {
     'Right mouse click and drag for translation of the camera target<br>' +
     'Mouse wheel for zooming/dezooming from camera target<br>' +
     'Mouse over an object (red cross is the target) to display additional infos<br>' +
-    'Double Click on red cross to define camera target',
+    'Double Click on red cross to define camera target<br>' +
+    'Press Escape key to reset to initial view<br>',
 };

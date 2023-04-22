@@ -1,5 +1,6 @@
-import { Group, Object3D } from 'three';
+import { Group, Object3D, Vector3 } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { SharedBoundingBoxUtil } from '../../shared/utils/bounding-box-util';
 import { ThreeDRendererRenderer } from '../systems/renderer';
 import {
   DEFAULT_BASICS_OPTIONS,
@@ -95,6 +96,28 @@ export class ThreeDRendererBasics
   }
   public resetView(): void {
     this._threeDRendererControls.reset();
+  }
+  public focusView(): void {
+    const minMax = SharedBoundingBoxUtil.computeFromObjects(
+      this._threeDRendererScene.cleanableObjects
+    );
+    const newTargetPos = new Vector3(
+      (minMax[1].x + minMax[0].x) / 2,
+      (minMax[1].y + minMax[0].y) / 2,
+      (minMax[1].z + minMax[0].z) / 2
+    );
+    const distanceMinMax = minMax[0].distanceTo(minMax[1]);
+    this._threeDRendererControls.setTarget(newTargetPos);
+    this._threeDRendererCamera.position.set(
+      newTargetPos.x - distanceMinMax,
+      newTargetPos.y - distanceMinMax,
+      newTargetPos.y + distanceMinMax
+    );
+    this._threeDRendererControls.update();
+    this._threeDRendererControls.dispatchEvent({
+      type: 'change',
+      target: this._threeDRendererControls,
+    });
   }
 
   // =======================================

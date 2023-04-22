@@ -1,5 +1,6 @@
 import { Intersection, Object3D } from 'three';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { FindObjectUtil } from '../shared/utils/find-object-util';
 import { GetOptionValueUtil } from './../shared/utils/get-option-value-util';
 import { ThreeDRendererBasics } from './basics/_basics';
 import { ThreeDRendererComponents } from './components/_components';
@@ -176,7 +177,6 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererControls.setTarget(
         intersected.point
       );
-      this._threeDRendererBasics.threeDRendererControls.update();
       this.render();
       this._threeDRendererBasics.threeDRendererControls.enableDamping = false;
       this._threeDRendererBasics.threeDRendererControls.enabled = true;
@@ -208,21 +208,15 @@ export class ThreeDRendererWorld {
     };
   }
   private _handleMouseOver(obj: Object3D): void {
-    if (obj.userData.onMouseOver !== undefined) {
-      obj.userData.onMouseOver();
-    } else {
-      if (obj.parent !== null) {
-        this._handleMouseOver(obj.parent);
-      }
+    const objWithMouseOver = FindObjectUtil.findMethodMouseOver(obj);
+    if (objWithMouseOver !== undefined) {
+      objWithMouseOver.userData.onMouseOver();
     }
   }
   private _handleMouseOut(obj: Object3D): void {
-    if (obj.userData.onMouseOut !== undefined) {
-      obj.userData.onMouseOut();
-    } else {
-      if (obj.parent !== null) {
-        this._handleMouseOut(obj.parent);
-      }
+    const objWithMouseOver = FindObjectUtil.findMethodMouseOut(obj);
+    if (objWithMouseOver !== undefined) {
+      objWithMouseOver.userData.onMouseOut();
     }
   }
 }

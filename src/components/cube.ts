@@ -20,6 +20,7 @@ export class ComponentCube
     this.userData = {
       onMouseOver: this.onMouseOver.bind(this),
       onMouseOut: this.onMouseOut.bind(this),
+      cleanable: true,
     };
     // create a geometry
     const geometry = new BoxGeometry(10, 10, 10);
@@ -29,6 +30,8 @@ export class ComponentCube
     });
     // create a Mesh containing the geometry and material
     const cube = new Mesh(geometry, material);
+    // cube.rotation.set(0.2, 0.5, 0.6);
+    cube.position.set(-500, 0, 0);
     this.add(cube);
   }
 
@@ -38,11 +41,11 @@ export class ComponentCube
   }
   public onMouseOver(): void {
     // specific behavior for update
-    (this.children[0] as any).material.wireframe = true;
+    // (this.children[0] as any).material.wireframe = true;
   }
   public onMouseOut(): void {
     // specific behavior for update
-    (this.children[0] as any).material.wireframe = false;
+    // (this.children[0] as any).material.wireframe = false;
   }
   public onMouseClick(_event: ComponentCubeEvent): void {
     // specific behavior for update

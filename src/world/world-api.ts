@@ -57,5 +57,7 @@ export class ThreeDRendererWorldApi {
   public hideDialogBox(id: string): void {
     this._threeDRendererPanels.hideDialogBox(id);
   }
-  public viewAll(): void {}
+  public focusView(): void {
+    this._threeDRendererBasics.focusView();
+  }
 }
