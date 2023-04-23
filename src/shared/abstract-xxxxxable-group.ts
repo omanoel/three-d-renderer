@@ -28,3 +28,25 @@ export abstract class AbstractTickableGroup extends AbstractClickableGroup {
   }
   public abstract tick(delta: number): void;
 }
+
+export abstract class AbstractOnlyTickableGroup extends Group {
+  constructor() {
+    super();
+    this.userData.tickable = true;
+    this.userData.tick = this.tick.bind(this);
+  }
+  public abstract tick(delta: number): void;
+}
+
+export abstract class AbstractOnlyClickableGroup extends Group {
+  constructor() {
+    super();
+    this.userData.clickable = true;
+    this.userData.onMouseOver = this.onMouseOver.bind(this);
+    this.userData.onMouseOut = this.onMouseOut.bind(this);
+    this.userData.onMouseDblClick = this.onMouseDblClick.bind(this);
+  }
+  public abstract onMouseOver(): void;
+  public abstract onMouseOut(): void;
+  public abstract onMouseDblClick(): void;
+}

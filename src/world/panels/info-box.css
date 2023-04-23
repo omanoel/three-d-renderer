@@ -1,0 +1,17 @@
+.three-d-renderer-info-box {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: rgba(50, 50, 50, 0.7);
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.three-d-renderer-info-box p {
+  color: whitesmoke;
+  text-align: left;
+  margin: 0px;
+  font-size: 11px;
+  line-height: 18px;
+}

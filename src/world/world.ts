@@ -85,7 +85,7 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererCamera,
       this._threeDRendererBasics.threeDRendererScene
     );
-    this._infoBox = new InfoBox(domContainer, 'info');
+    this._infoBox = new InfoBox(domContainer);
     this._threeDRendererPanels = new ThreeDRendererPanels(
       domContainer,
       this.options.panels
@@ -132,7 +132,8 @@ export class ThreeDRendererWorld {
       this._threeDRendererHelpers.threeDRendererCrossPointer.display(
         intersected.point
       );
-      this._infoBox.setInnerHtml(
+      this._infoBox.addMessage(
+        'raycaster',
         'Intersect at (' +
           GetOptionValueUtil.getFixedValue(
             intersected.point.x + this._options.worldOrigin.x
@@ -164,6 +165,7 @@ export class ThreeDRendererWorld {
         );
       }
       // this._threeDRendererBasics.threeDRendererRaycaster.intersected?.onMouseOut();
+      this._infoBox.removeMessage('raycaster');
       this._threeDRendererBasics.threeDRendererRaycaster.clearIntersected();
       this.render();
     };
@@ -188,13 +190,18 @@ export class ThreeDRendererWorld {
     this._threeDRendererBasics.threeDRendererControls.handleChange = () => {
       const distance =
         this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
-      this._infoBox.setInnerHtml(
-        'Distance: ' +
-          GetOptionValueUtil.getFixedValue(distance) +
-          '<br>' +
-          'Count:' +
-          this._threeDRendererBasics.threeDRendererScene.countObjects +
-          '<br>'
+      this._infoBox.addMessage(
+        'distance',
+        'Distance: ' + GetOptionValueUtil.getFixedValue(distance)
+      );
+      this._infoBox.addMessage(
+        'count',
+        'Count:' + this._threeDRendererBasics.threeDRendererScene.countObjects
+      );
+      this._infoBox.addMessagePosition(
+        'target',
+        'Target at:',
+        this._threeDRendererBasics.threeDRendererControls.target
       );
       this._previousDistance =
         this._threeDRendererHelpers.threeDRendererGridsHelper.resize(
@@ -203,7 +210,10 @@ export class ThreeDRendererWorld {
           this._threeDRendererBasics.threeDRendererCamera.position
         );
       this._threeDRendererHelpers.threeDRendererCrossPointer.resize(distance);
-      this._threeDRendererHelpers.threeDRendererAxesHelper.resize(distance);
+      this._threeDRendererHelpers.threeDRendererAxesHelper.resize(
+        distance,
+        this._threeDRendererBasics.threeDRendererControls.target
+      );
       this.render();
     };
   }
