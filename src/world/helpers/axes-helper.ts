@@ -1,4 +1,5 @@
-import { ArrowHelper, Group, Object3D, Vector3 } from 'three';
+import { ArrowHelper, Object3D, Vector3 } from 'three';
+import { AbstractOnlyTickableGroup } from '../../shared/abstract-xxxxxable-group';
 import { SharedAxisTypes } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
@@ -8,7 +9,7 @@ import {
 } from './axes-helper-options';
 
 export class ThreeDRendererAxesHelper
-  extends Group
+  extends AbstractOnlyTickableGroup
   implements IConfigurable<ThreeDRendererAxesHelperOptions>
 {
   //
@@ -48,13 +49,11 @@ export class ThreeDRendererAxesHelper
       }
     }
   }
-  public resize(distance: number): void {
-    const options: ThreeDRendererAxesHelperOptions = {
-      ...this._options,
-      length:
-        (this._options.length * distance) / this._originalDistanceToTarget,
-    };
-    this._build(options);
+  public tick(delta: number): void {
+    // can be overriden in world
+  }
+  public resize(distance: number, targetPos: Vector3): void {
+    this._update(distance / this._originalDistanceToTarget, targetPos);
   }
 
   // =======================================
@@ -69,6 +68,16 @@ export class ThreeDRendererAxesHelper
     this._updateAxisArrowWithOptions(axisArrowY, options, 'y');
     this._updateAxisArrowWithOptions(axisArrowZ, options, 'z');
     this.add(axisArrowX, axisArrowY, axisArrowZ);
+    this.position.set(
+      options.position.x,
+      options.position.y,
+      options.position.z
+    );
+  }
+
+  private _update(scale: number, position: Vector3): void {
+    this.position.set(position.x, position.y, position.z);
+    this.scale.set(scale, scale, scale);
   }
 
   private _initAxisArrow(
