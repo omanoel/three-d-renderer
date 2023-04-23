@@ -1,19 +1,22 @@
-import { Group, Object3D } from 'three';
+import { Group, Object3D, Vector3 } from 'three';
 import { ThreeDRendererBasics } from './basics/_basics';
 import { ThreeDRendererHelpers } from './helpers/_helpers';
 import { ThreeDRendererPanels } from './panels/_panels';
 import { ThreeDRendererWorldOptions } from './world-options';
 
 export class ThreeDRendererWorldApi {
+  private _worldOptions: ThreeDRendererWorldOptions;
   private _threeDRendererBasics: ThreeDRendererBasics;
   private _threeDRendererPanels: ThreeDRendererPanels;
   private _threeDRendererHelpers: ThreeDRendererHelpers;
   constructor(
+    worldOptions: ThreeDRendererWorldOptions,
     threeDRendererBasics: ThreeDRendererBasics,
     threeDRendererPanels: ThreeDRendererPanels,
     threeDRendererHelpers: ThreeDRendererHelpers
   ) {
     //
+    this._worldOptions = worldOptions;
     this._threeDRendererBasics = threeDRendererBasics;
     this._threeDRendererPanels = threeDRendererPanels;
     this._threeDRendererHelpers = threeDRendererHelpers;
@@ -25,7 +28,12 @@ export class ThreeDRendererWorldApi {
     this._threeDRendererHelpers.updateWithOptions(options.helpers);
   }
   public addGroup(group: Group): void {
-    this._threeDRendererBasics.addGroup(group);
+    const worldOrigin = new Vector3(
+      this._worldOptions.worldOrigin.x,
+      this._worldOptions.worldOrigin.y,
+      this._worldOptions.worldOrigin.z
+    );
+    this._threeDRendererBasics.addGroup(group, worldOrigin);
   }
   public getGroupById(id: number): Object3D | undefined {
     return this._threeDRendererBasics.getGroupById(id);

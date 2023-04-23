@@ -1,3 +1,6 @@
+import { Vector3 } from 'three';
+import { SharedPositionOptions } from '../i-options';
+
 export class GetOptionValueUtil {
   private constructor() {
     // Private constructor
@@ -13,6 +16,13 @@ export class GetOptionValueUtil {
   }
 
   public static getFixedValue(value: number): string {
-    return value.toFixed(2).replace(".00", "");
+    return value.toFixed(2).replace('.00', '');
+  }
+
+  public static getWorldVector3(
+    vec: Vector3,
+    pos: SharedPositionOptions
+  ): Vector3 {
+    return new Vector3(pos.x, pos.y, pos.z).add(vec);
   }
 }

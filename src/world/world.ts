@@ -92,6 +92,7 @@ export class ThreeDRendererWorld {
     );
     // API
     this._api = new ThreeDRendererWorldApi(
+      this.options,
       this._threeDRendererBasics,
       this._threeDRendererPanels,
       this._threeDRendererHelpers
@@ -132,21 +133,15 @@ export class ThreeDRendererWorld {
       this._threeDRendererHelpers.threeDRendererCrossPointer.display(
         intersected.point
       );
-      this._infoBox.addMessage(
+      this._infoBox.addMessagePosition(
         'raycaster',
-        'Intersect at (' +
-          GetOptionValueUtil.getFixedValue(
-            intersected.point.x + this._options.worldOrigin.x
-          ) +
-          ' , ' +
-          GetOptionValueUtil.getFixedValue(
-            intersected.point.y + this._options.worldOrigin.y
-          ) +
-          ' , ' +
-          GetOptionValueUtil.getFixedValue(
-            intersected.point.z + this._options.worldOrigin.z
-          ) +
-          ')'
+        'Intersect with [' +
+          FindObjectUtil.findMethodMouseOut(intersected.object)?.name +
+          '] at',
+        GetOptionValueUtil.getWorldVector3(
+          intersected.point,
+          this._options.worldOrigin
+        )
       );
       this._handleMouseOver(intersected.object);
       this.render();
@@ -200,8 +195,11 @@ export class ThreeDRendererWorld {
       );
       this._infoBox.addMessagePosition(
         'target',
-        'Target at:',
-        this._threeDRendererBasics.threeDRendererControls.target
+        'Target at',
+        GetOptionValueUtil.getWorldVector3(
+          this._threeDRendererBasics.threeDRendererControls.target,
+          this._options.worldOrigin
+        )
       );
       this._previousDistance =
         this._threeDRendererHelpers.threeDRendererGridsHelper.resize(

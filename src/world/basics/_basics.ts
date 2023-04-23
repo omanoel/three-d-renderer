@@ -71,8 +71,8 @@ export class ThreeDRendererBasics
     }
   }
 
-  public addGroup(group: Group): void {
-    this._threeDRendererScene.addGroup(group);
+  public addGroup(group: Group, worldOrigin: Vector3): void {
+    this._threeDRendererScene.addGroup(group, worldOrigin);
   }
   public removeGroupById(id: number): void {
     this._threeDRendererScene.removeGroupById(id);

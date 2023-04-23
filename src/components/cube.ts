@@ -14,7 +14,7 @@ export class ComponentCube extends AbstractTickableGroup {
     // create a Mesh containing the geometry and material
     const cube = new Mesh(geometry, material);
     // cube.rotation.set(0.2, 0.5, 0.6);
-    cube.position.set(-500, 0, 0);
+    cube.position.set(400, 0, 0);
     this.add(cube);
   }
 

@@ -1,4 +1,4 @@
-import { Color, Group, Object3D, Scene } from 'three';
+import { Color, Group, Object3D, Scene, Vector3 } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   DEFAULT_SCENE_OPTIONS,
@@ -33,7 +33,9 @@ export class ThreeDRendererScene
   public get tickableObjects(): Object3D[] {
     return this.children.filter((c) => c.userData.tickable !== undefined);
   }
-  public addGroup(group: Group): void {
+  public addGroup(group: Group, worldOrigin: Vector3): void {
+    const worldPos = new Vector3().copy(group.position).sub(worldOrigin);
+    group.position.set(worldPos.x, worldPos.y, worldPos.z);
     this.add(group);
   }
   public getGroupById(id: number): Object3D | undefined {
