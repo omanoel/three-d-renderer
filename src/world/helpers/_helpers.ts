@@ -38,6 +38,7 @@ export class ThreeDRendererHelpers
     options.gridsHelper.worldOrigin = worldOrigin;
     this._threeDRendererGridsHelper = new ThreeDRendererGridsHelper(
       font,
+      threeDRendererControls.distanceToTarget,
       threeDRendererCamera.position,
       options.gridsHelper
     );

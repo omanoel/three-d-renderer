@@ -16,6 +16,7 @@ import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
   DEFAULT_GRIDS_HELPER_OPTIONS,
+  GRIDS_HELPER_SIZES,
   ThreeDRendererGridsHelperOptions,
   ThreeDRendererGridsHelperPlaneOptions,
 } from './grids-helper-options';
@@ -36,6 +37,7 @@ export class ThreeDRendererGridsHelper
   // =======================================
   constructor(
     font: Font,
+    distanceToTarget: number,
     cameraPosition: Vector3,
     initOptions?: Partial<ThreeDRendererGridsHelperOptions>
   ) {
@@ -46,6 +48,7 @@ export class ThreeDRendererGridsHelper
       ...initOptions,
     };
     this._options = options;
+    this._options.size = this._getSizeFromDistance(distanceToTarget);
     this._font = font;
     this._textParameter = {
       font: this._font, // An instance of THREE.Font.
@@ -80,19 +83,11 @@ export class ThreeDRendererGridsHelper
     this._buildGridsHelper();
   }
 
-  public resize(
-    distance: number,
-    previousDistance: number,
-    cameraPosition: Vector3
-  ): number {
+  public resize(distance: number, cameraPosition: Vector3): void {
+    const newSize = this._getSizeFromDistance(distance);
     let needResize = false;
-    if (distance >= previousDistance * 2) {
-      this._options.size *= 2;
-      previousDistance = this._options.size;
-      needResize = true;
-    } else if (distance <= previousDistance / 2) {
-      this._options.size /= 2;
-      previousDistance = this._options.size;
+    if (this._options.size !== newSize) {
+      this._options.size = newSize;
       needResize = true;
     }
     if (needResize) {
@@ -100,7 +95,6 @@ export class ThreeDRendererGridsHelper
       this._buildGridsHelperLabels();
     }
     this._gridsHelperLabelsLookAt(cameraPosition);
-    return previousDistance;
   }
 
   // =======================================
@@ -204,5 +198,17 @@ export class ThreeDRendererGridsHelper
         l.lookAt(cameraPosition);
       });
     }
+  }
+
+  private _getSizeFromDistance(distance: number): number {
+    let i = GRIDS_HELPER_SIZES.length - 1;
+    let size = 0;
+    while (i >= 0 && size === 0) {
+      if (distance / GRIDS_HELPER_SIZES[i] > 1) {
+        size = GRIDS_HELPER_SIZES[i + 1];
+      }
+      i--;
+    }
+    return size;
   }
 }

@@ -10,7 +10,7 @@ import { InfoBox } from './panels/info-box';
 import jsonFont from './shared/fonts/optimer_bold.typeface.json';
 import { ThreeDRendererLoop } from './systems/loop';
 import { ThreeDRendererRenderer } from './systems/renderer';
-import { ThreeDRendererWindowResizer } from './systems/window-resizer';
+import { ThreeDRendererResizer } from './systems/resizer';
 import { ThreeDRendererWorldApi } from './world-api';
 import {
   DEFAULT_WORLD_OPTIONS,
@@ -72,12 +72,12 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererControls.distanceToTarget;
     this._handleEvents();
 
-    const threeDRendererWindowResizer = new ThreeDRendererWindowResizer(
+    const threeDRendererResizer = new ThreeDRendererResizer(
       domContainer,
       this._threeDRendererRenderer,
       this._threeDRendererBasics.threeDRendererCamera
     );
-    threeDRendererWindowResizer.onResize = () => {
+    threeDRendererResizer.onResize = () => {
       this.render();
     };
     this._loop = new ThreeDRendererLoop(
@@ -194,6 +194,14 @@ export class ThreeDRendererWorld {
         'Count:' + this._threeDRendererBasics.threeDRendererScene.countObjects
       );
       this._infoBox.addMessagePosition(
+        'Camera',
+        'Camera at: ',
+        GetOptionValueUtil.getWorldVector3(
+          this._threeDRendererBasics.threeDRendererCamera.position,
+          this._options.worldOrigin
+        )
+      );
+      this._infoBox.addMessagePosition(
         'target',
         'Target at',
         GetOptionValueUtil.getWorldVector3(
@@ -201,12 +209,10 @@ export class ThreeDRendererWorld {
           this._options.worldOrigin
         )
       );
-      this._previousDistance =
-        this._threeDRendererHelpers.threeDRendererGridsHelper.resize(
-          distance,
-          this._previousDistance,
-          this._threeDRendererBasics.threeDRendererCamera.position
-        );
+      this._threeDRendererHelpers.threeDRendererGridsHelper.resize(
+        distance,
+        this._threeDRendererBasics.threeDRendererCamera.position
+      );
       this._threeDRendererHelpers.threeDRendererCrossPointer.resize(distance);
       this._threeDRendererHelpers.threeDRendererAxesHelper.resize(
         distance,

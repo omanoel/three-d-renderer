@@ -74,3 +74,8 @@ export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
     },
   },
 };
+
+export const GRIDS_HELPER_SIZES = [
+  0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000,
+  2000, 5000, 10000,
+];
