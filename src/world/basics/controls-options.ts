@@ -8,7 +8,7 @@ export interface ThreeDRendererControlsOptions {
 }
 
 export const DEFAULT_CONTROLS_OPTIONS: ThreeDRendererControlsOptions = {
-  resetKey: "Escape",
+  resetKey: 'Escape',
   minDistance: 0.01,
   maxDistance: Infinity,
   zoomSpeed: 0.3,

@@ -1,7 +1,6 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import { ITickable } from '../../shared/interfaces/i-tickable';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
   DEFAULT_CONTROLS_OPTIONS,
@@ -10,11 +9,12 @@ import {
 
 export class ThreeDRendererControls
   extends OrbitControls
-  implements ITickable, IConfigurable<ThreeDRendererControlsOptions>
+  implements IConfigurable<ThreeDRendererControlsOptions>
 {
   //
   private _resetKey: string;
-  public tickable: true;
+  private _boundingChangeEvent: () => void;
+  private _boundingKeydownEvent: (event: KeyboardEvent) => void;
 
   constructor(
     camera: PerspectiveCamera,
@@ -22,7 +22,6 @@ export class ThreeDRendererControls
     initOptions?: Partial<ThreeDRendererControlsOptions>
   ) {
     super(camera, domContainer);
-    this.tickable = true;
     const options = {
       ...DEFAULT_CONTROLS_OPTIONS,
       ...initOptions,
@@ -32,13 +31,16 @@ export class ThreeDRendererControls
     this.maxDistance = camera.far / options.rangeFactor;
     this.zoomSpeed = options.zoomSpeed;
     this.rotateSpeed = options.rotateSpeed;
-    // this._controls.enableDamping = true;
-    this.addEventListener('change', () => {
+    this._boundingChangeEvent = () => {
       this.handleChange();
-    });
+    };
+    this._boundingKeydownEvent = (event: KeyboardEvent) =>
+      this.handleKeyDown(event);
+    // this._controls.enableDamping = true;
+    this.addEventListener('change', this._boundingChangeEvent);
     domContainer.ownerDocument.addEventListener(
       'keydown',
-      (event: KeyboardEvent) => this.handleKeyDown(event)
+      this._boundingKeydownEvent
     );
   }
 
@@ -57,7 +59,7 @@ export class ThreeDRendererControls
 
   public handleKeyDown(event: KeyboardEvent): void {
     if (event.key === this._resetKey) {
-      this.reset();
+      this.resetView();
     }
   }
 
@@ -71,5 +73,13 @@ export class ThreeDRendererControls
 
   public setTarget(position: Vector3): void {
     this.target.set(position.x, position.y, position.z);
+  }
+
+  public resetView(): void {
+    this.reset();
+    this.dispatchEvent({
+      type: 'change',
+      target: this,
+    });
   }
 }
