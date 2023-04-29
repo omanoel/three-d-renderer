@@ -1,13 +1,13 @@
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import {
   DEFAULT_PANELS_OPTIONS,
-  ThreeDRendererPanelsOptions,
+  ThreeDRendererPanelsOptions
 } from './_panels-options';
 import { ThreeDRendererDialogBoxUtil } from './dailog-box-util';
 import { ThreeDRendererDialogBox } from './dialog-box';
 import {
   DEFAULT_HOWTONAVIGATE_OPTIONS,
-  ThreeDRendererDialogBoxOptions,
+  ThreeDRendererDialogBoxOptions
 } from './dialog-box-options';
 
 export class ThreeDRendererPanels
@@ -23,7 +23,7 @@ export class ThreeDRendererPanels
   ) {
     const options = {
       ...DEFAULT_PANELS_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._dialogBoxUtil = new ThreeDRendererDialogBoxUtil();
     this._defaultDialogBox = this.addDialogBox(domContainer, options.default);

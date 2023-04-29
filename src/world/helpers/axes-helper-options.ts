@@ -54,36 +54,36 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
   position: {
     x: 0,
     y: 0,
-    z: 0,
+    z: 0
   },
   x: {
     visible: true,
     position: {
       x: 0,
       y: 0,
-      z: 0,
+      z: 0
     },
     inverted: false,
-    color: 'red',
+    color: 'red'
   },
   y: {
     visible: true,
     position: {
       x: 0,
       y: 0,
-      z: 0,
+      z: 0
     },
     inverted: false,
-    color: 'green',
+    color: 'green'
   },
   z: {
     visible: true,
     position: {
       x: 0,
       y: 0,
-      z: 0,
+      z: 0
     },
     inverted: false,
-    color: 'blue',
-  },
+    color: 'blue'
+  }
 };

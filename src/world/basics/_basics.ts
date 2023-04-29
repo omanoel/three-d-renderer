@@ -1,10 +1,10 @@
-import { Group, Object3D, Vector3 } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { Object3D, Vector3 } from 'three';
+import { IConfigurable } from '../../shared/interfaces';
 import { SharedBoundingBoxUtil } from '../../shared/utils/bounding-box-util';
 import { ThreeDRendererRenderer } from '../systems/renderer';
 import {
   DEFAULT_BASICS_OPTIONS,
-  ThreeDRendererBasicsOptions,
+  ThreeDRendererBasicsOptions
 } from './_basics-options';
 import { ThreeDRendererCamera } from './camera';
 import { ThreeDRendererControls } from './controls';
@@ -37,7 +37,7 @@ export class ThreeDRendererBasics
   ) {
     const options = {
       ...DEFAULT_BASICS_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._threeDRendererScene = new ThreeDRendererScene(options.scene);
     this._threeDRendererCamera = new ThreeDRendererCamera(options.camera);
@@ -71,14 +71,14 @@ export class ThreeDRendererBasics
     }
   }
 
-  public addGroup(group: Group, worldOrigin: Vector3): void {
-    this._threeDRendererScene.addGroup(group, worldOrigin);
+  public addObject(obj: Object3D, worldOrigin: Vector3): void {
+    this._threeDRendererScene.addObject(obj, worldOrigin);
   }
-  public removeGroupById(id: number): void {
-    this._threeDRendererScene.removeGroupById(id);
+  public removeObjectById(id: number): void {
+    this._threeDRendererScene.removeObjectById(id);
   }
-  public getGroupById(id: number): Object3D | undefined {
-    return this._threeDRendererScene.getGroupById(id);
+  public getObjectById(id: number): Object3D | undefined {
+    return this._threeDRendererScene.getObjectById(id);
   }
   public cleanScene(): void {
     this._threeDRendererScene.cleanScene();
@@ -97,9 +97,9 @@ export class ThreeDRendererBasics
   public resetView(): void {
     this._threeDRendererControls.resetView();
   }
-  public focusView(): void {
+  public focusView(objects: Object3D[]): void {
     const minMax = SharedBoundingBoxUtil.computeFromObjects(
-      this._threeDRendererScene.cleanableObjects
+      objects.length > 0 ? objects : this._threeDRendererScene.cleanableObjects
     );
     const newTargetPos = new Vector3(
       (minMax[1].x + minMax[0].x) / 2,
@@ -116,10 +116,21 @@ export class ThreeDRendererBasics
     this._threeDRendererControls.update();
     this._threeDRendererControls.dispatchEvent({
       type: 'change',
-      target: this._threeDRendererControls,
+      target: this._threeDRendererControls
     });
   }
-
+  public hideByIds(ids: number[]): void {
+    this._threeDRendererScene.hideByIds(ids);
+  }
+  public showByIds(ids: number[]): void {
+    this._threeDRendererScene.showByIds(ids);
+  }
+  public showByType(type: string): void {
+    this._threeDRendererScene.showByType(type);
+  }
+  public hideByType(type: string): void {
+    this._threeDRendererScene.hideByType(type);
+  }
   // =======================================
   // GETTER
   // =======================================

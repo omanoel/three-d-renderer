@@ -1,10 +1,10 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
   DEFAULT_CONTROLS_OPTIONS,
-  ThreeDRendererControlsOptions,
+  ThreeDRendererControlsOptions
 } from './controls-options';
 
 export class ThreeDRendererControls
@@ -24,7 +24,7 @@ export class ThreeDRendererControls
     super(camera, domContainer);
     const options = {
       ...DEFAULT_CONTROLS_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._resetKey = options.resetKey;
     this.minDistance = camera.near * options.rangeFactor;
@@ -79,7 +79,7 @@ export class ThreeDRendererControls
     this.reset();
     this.dispatchEvent({
       type: 'change',
-      target: this,
+      target: this
     });
   }
 }

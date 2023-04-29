@@ -1,24 +1,28 @@
 import { WebGLRenderer } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 
 export interface ThreeDRendererRendererOptions {
   antialias: boolean;
 }
 
 export const DEFAULT_RENDERER_OPTIONS: ThreeDRendererRendererOptions = {
-  antialias: true,
+  antialias: true
 };
 
 export class ThreeDRendererRenderer
   extends WebGLRenderer
   implements IConfigurable<ThreeDRendererRendererOptions>
 {
-  constructor(initOptions?: Partial<ThreeDRendererRendererOptions>) {
+  constructor(
+    domContainer: HTMLDivElement,
+    initOptions?: Partial<ThreeDRendererRendererOptions>
+  ) {
     super({ antialias: true });
     const options = {
       ...DEFAULT_RENDERER_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
+    domContainer.append(this.domElement);
   }
 
   public updateWithOptions(

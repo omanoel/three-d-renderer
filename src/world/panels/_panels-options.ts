@@ -1,7 +1,7 @@
 import {
   DEFAULT_DIALOG_BOX_OPTIONS,
   DEFAULT_HOWTONAVIGATE_OPTIONS,
-  ThreeDRendererDialogBoxOptions,
+  ThreeDRendererDialogBoxOptions
 } from './dialog-box-options';
 
 export interface ThreeDRendererPanelsOptions {
@@ -11,5 +11,5 @@ export interface ThreeDRendererPanelsOptions {
 
 export const DEFAULT_PANELS_OPTIONS = {
   default: DEFAULT_DIALOG_BOX_OPTIONS,
-  howToNavigate: DEFAULT_HOWTONAVIGATE_OPTIONS,
+  howToNavigate: DEFAULT_HOWTONAVIGATE_OPTIONS
 };

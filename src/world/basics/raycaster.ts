@@ -1,12 +1,11 @@
 import { Intersection, Raycaster, Vector2 } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import { FindObjectUtil } from '../../shared/utils/find-object-util';
+import { IConfigurable } from '../../shared/interfaces';
 import { ThreeDRendererCamera } from '../basics/camera';
 import { ThreeDRendererScene } from '../basics/scene';
 import { ThreeDRendererRenderer } from '../systems/renderer';
 import {
   DEFAULT_RAYCASTER_OPTIONS,
-  ThreeDRendererRaycasterOptions,
+  ThreeDRendererRaycasterOptions
 } from './raycaster-options';
 
 export class ThreeDRendererRaycaster
@@ -35,7 +34,7 @@ export class ThreeDRendererRaycaster
     super();
     const options = {
       ...DEFAULT_RAYCASTER_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._document = domContainer.ownerDocument;
     this._isActive = options.isActive;
@@ -74,7 +73,7 @@ export class ThreeDRendererRaycaster
   public handleMouseOver(_intersected: Intersection): void {
     // Empty here
   }
-  public handleMouseOut(): void {
+  public handleMouseOut(_intersected: Intersection): void {
     // Empty here
   }
   public handleMouseDblClick(_intersected: Intersection): void {
@@ -126,8 +125,9 @@ export class ThreeDRendererRaycaster
     if (intersects.length > 0) {
       this._intersected = intersects[0];
       this.handleMouseOver(intersects[0]);
-    } else {
-      this.handleMouseOut();
+    } else if (this._intersected !== undefined) {
+      this.handleMouseOut({ ...this._intersected });
+      this._intersected = undefined;
     }
   }
 
@@ -155,23 +155,20 @@ export class ThreeDRendererRaycaster
     threeDRendererCamera: ThreeDRendererCamera
   ): Intersection[] {
     const mouse = new Vector2();
+    const boundRect = threeDRendererRenderer.domElement.getBoundingClientRect();
     mouse.x =
-      ((mouseEvent.clientX - threeDRendererRenderer.domElement.offsetLeft) /
+      ((mouseEvent.clientX - boundRect.left) /
         threeDRendererRenderer.domElement.clientWidth) *
         2 -
       1;
     mouse.y =
       -(
-        (mouseEvent.clientY - threeDRendererRenderer.domElement.offsetTop) /
+        (mouseEvent.clientY - boundRect.top) /
         threeDRendererRenderer.domElement.clientHeight
       ) *
         2 +
       1;
     this.setFromCamera(mouse, threeDRendererCamera);
-    return this.intersectObjects(threeDRendererScene.children, true).filter(
-      (int) => {
-        return FindObjectUtil.findMethodMouseOver(int.object) !== undefined;
-      }
-    );
+    return this.intersectObjects(threeDRendererScene.clickableObjects, true);
   }
 }

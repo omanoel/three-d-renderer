@@ -4,34 +4,38 @@ import {
   Material,
   Mesh,
   MeshBasicMaterial,
-  Vector3,
+  Vector3
 } from 'three';
 import {
   TextGeometry,
-  TextGeometryParameters,
+  TextGeometryParameters
 } from 'three/examples/jsm/geometries/TextGeometry';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { AbstractOnlyTickableGroup } from '../../shared/abstract-xxxxxable-group';
 import { SharedAxisTypes } from '../../shared/i-options';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable, ITickParams } from '../../shared/interfaces';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
+import { ITickable } from './../../shared/interfaces';
 import {
   DEFAULT_GRIDS_HELPER_OPTIONS,
   GRIDS_HELPER_SIZES,
   ThreeDRendererGridsHelperOptions,
-  ThreeDRendererGridsHelperPlaneOptions,
+  ThreeDRendererGridsHelperPlaneOptions
 } from './grids-helper-options';
 
 export class ThreeDRendererGridsHelper
-  extends Group
+  extends AbstractOnlyTickableGroup<ITickable>
   implements IConfigurable<ThreeDRendererGridsHelperOptions>
 {
+  public type: string;
+
   private _options: ThreeDRendererGridsHelperOptions;
   private _font: Font;
   private _textParameter: TextGeometryParameters;
   private _textMaterial: MeshBasicMaterial;
   private _idGroupLabels: number | undefined;
+  private _tickTargetPos: Vector3;
 
-  public tickable: true;
   // =======================================
   // CONSTRUCTOR
   // =======================================
@@ -39,16 +43,18 @@ export class ThreeDRendererGridsHelper
     font: Font,
     distanceToTarget: number,
     cameraPosition: Vector3,
+    initActions?: Partial<ITickable>,
     initOptions?: Partial<ThreeDRendererGridsHelperOptions>
   ) {
-    super();
-    this.tickable = true;
+    super(initActions);
     const options = {
       ...DEFAULT_GRIDS_HELPER_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
+    this.type = 'ThreeDRendererGridsHelper';
     this._options = options;
     this._options.size = this._getSizeFromDistance(distanceToTarget);
+    this._tickTargetPos = cameraPosition;
     this._font = font;
     this._textParameter = {
       font: this._font, // An instance of THREE.Font.
@@ -60,15 +66,17 @@ export class ThreeDRendererGridsHelper
       bevelThickness: 1, // Float. How deep into text bevel goes. Default is 10.
       bevelSize: 1, // Float. How far from text outline is bevel. Default is 8.
       bevelOffset: 0, // Float. How far from text outline bevel starts. Default is 0.
-      bevelSegments: 1, // Integer. Number of bevel segments. Default is 3.
+      bevelSegments: 1 // Integer. Number of bevel segments. Default is 3.
     };
     this._textMaterial = new MeshBasicMaterial({
       opacity: 0.4,
-      transparent: true,
+      transparent: true
     });
     this._buildGridsHelper();
     this._buildGridsHelperLabels();
     this._gridsHelperLabelsLookAt(cameraPosition);
+    // override onTick
+    this.userData.onTick = this.tick.bind(this);
   }
 
   // =======================================
@@ -79,22 +87,16 @@ export class ThreeDRendererGridsHelper
   ): void {
     if (options.xy !== undefined) {
       this._options.xy = options.xy;
-    }
-    this._buildGridsHelper();
-  }
-
-  public resize(distance: number, cameraPosition: Vector3): void {
-    const newSize = this._getSizeFromDistance(distance);
-    let needResize = false;
-    if (this._options.size !== newSize) {
-      this._options.size = newSize;
-      needResize = true;
-    }
-    if (needResize) {
       this._buildGridsHelper();
+    }
+    if (options.gridOrigin !== undefined) {
+      this._options.gridOrigin = options.gridOrigin;
       this._buildGridsHelperLabels();
     }
-    this._gridsHelperLabelsLookAt(cameraPosition);
+  }
+
+  public tick(_deltaTime: number, params: ITickParams): void {
+    this._update(params.distance, this._tickTargetPos);
   }
 
   // =======================================
@@ -162,7 +164,7 @@ export class ThreeDRendererGridsHelper
     unit?: string
   ): Mesh {
     const labelPosText = GetOptionValueUtil.getFixedValue(
-      this._options.worldOrigin[axis] +
+      this._options.gridOrigin[axis] +
         (value * this._options.size) / this._options.divisions
     );
     const textGeometry = new TextGeometry(
@@ -198,6 +200,20 @@ export class ThreeDRendererGridsHelper
         l.lookAt(cameraPosition);
       });
     }
+  }
+
+  public _update(distance: number, cameraPosition: Vector3): void {
+    const newSize = this._getSizeFromDistance(distance);
+    let needResize = false;
+    if (this._options.size !== newSize) {
+      this._options.size = newSize;
+      needResize = true;
+    }
+    if (needResize) {
+      this._buildGridsHelper();
+      this._buildGridsHelperLabels();
+    }
+    this._gridsHelperLabelsLookAt(cameraPosition);
   }
 
   private _getSizeFromDistance(distance: number): number {

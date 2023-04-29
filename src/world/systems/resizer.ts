@@ -54,9 +54,11 @@ export class ThreeDRendererResizer {
     renderer: WebGLRenderer,
     camera: PerspectiveCamera
   ): void {
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    if (width > 0 && height > 0) {
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+    }
   }
 }

@@ -19,6 +19,10 @@ export class GetOptionValueUtil {
     return value.toFixed(2).replace('.00', '');
   }
 
+  public static getVector3(pos: SharedPositionOptions): Vector3 {
+    return new Vector3(pos.x, pos.y, pos.z);
+  }
+
   public static getWorldVector3(
     vec: Vector3,
     pos: SharedPositionOptions

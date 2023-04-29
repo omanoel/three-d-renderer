@@ -4,7 +4,7 @@ import { ThreeDRendererAmbientLight } from './ambient-light';
 import { ThreeDRendererDirectionalLight } from './directional-light';
 import {
   ThreeDRendererComponentsOptions,
-  DEFAULT_COMPONENTS_OPTIONS,
+  DEFAULT_COMPONENTS_OPTIONS
 } from './_components-options';
 
 export class ThreeDRendererComponents
@@ -21,7 +21,7 @@ export class ThreeDRendererComponents
     super();
     const options = {
       ...DEFAULT_COMPONENTS_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._threeDRendererAmbientLight = new ThreeDRendererAmbientLight();
     this._threeDRendererDirectionalLight = new ThreeDRendererDirectionalLight();

@@ -3,5 +3,5 @@ export interface ThreeDRendererRaycasterOptions {
 }
 
 export const DEFAULT_RAYCASTER_OPTIONS: ThreeDRendererRaycasterOptions = {
-  isActive: true,
+  isActive: true
 };

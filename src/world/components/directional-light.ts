@@ -2,7 +2,7 @@ import { Color, DirectionalLight } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererDirectionalLightOptions,
-  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
+  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS
 } from './directional-light-options';
 
 export class ThreeDRendererDirectionalLight
@@ -14,7 +14,7 @@ export class ThreeDRendererDirectionalLight
     super();
     const options = {
       ...DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this.updateWithOptions(options);
   }

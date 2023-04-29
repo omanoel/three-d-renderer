@@ -2,7 +2,7 @@ import { AmbientLight, Color } from 'three';
 import { IConfigurable } from '../../shared/interfaces/i-configurable';
 import {
   ThreeDRendererAmbientLightOptions,
-  DEFAULT_AMBIENT_LIGHT_OPTIONS,
+  DEFAULT_AMBIENT_LIGHT_OPTIONS
 } from './ambient-light-options';
 
 export class ThreeDRendererAmbientLight
@@ -13,7 +13,7 @@ export class ThreeDRendererAmbientLight
     super();
     const options = {
       ...DEFAULT_AMBIENT_LIGHT_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this.updateWithOptions(options);
   }

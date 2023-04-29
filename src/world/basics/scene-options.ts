@@ -1,4 +1,4 @@
-import { ColorRepresentation } from "three";
+import { ColorRepresentation } from 'three';
 
 export interface ThreeDRendererSceneOptions {
   /**
@@ -10,5 +10,5 @@ export interface ThreeDRendererSceneOptions {
 }
 
 export const DEFAULT_SCENE_OPTIONS: ThreeDRendererSceneOptions = {
-  backgroundColor: "black",
+  backgroundColor: 'black'
 };

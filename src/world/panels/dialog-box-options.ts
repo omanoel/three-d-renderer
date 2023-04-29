@@ -10,7 +10,7 @@ export interface ThreeDRendererDialogBoxOptions {
 export const DEFAULT_DIALOG_BOX_OPTIONS: ThreeDRendererDialogBoxOptions = {
   id: 'default',
   title: 'Title',
-  message: 'Message',
+  message: 'Message'
 };
 
 export const DEFAULT_HOWTONAVIGATE_OPTIONS: ThreeDRendererDialogBoxOptions = {
@@ -22,5 +22,5 @@ export const DEFAULT_HOWTONAVIGATE_OPTIONS: ThreeDRendererDialogBoxOptions = {
     'Mouse wheel for zooming/dezooming from camera target<br>' +
     'Mouse over an object (red cross is the target) to display additional infos<br>' +
     'Double Click on red cross to define camera target<br>' +
-    'Press Escape key to reset to initial view<br>',
+    'Press Escape key to reset to initial view<br>'
 };

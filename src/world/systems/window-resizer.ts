@@ -1,5 +1,5 @@
-import { ThreeDRendererRenderer } from "./renderer";
-import { ThreeDRendererCamera } from "../basics/camera";
+import { ThreeDRendererRenderer } from './renderer';
+import { ThreeDRendererCamera } from '../basics/camera';
 
 export class ThreeDRendererWindowResizer {
   //
@@ -9,7 +9,7 @@ export class ThreeDRendererWindowResizer {
     camera: ThreeDRendererCamera
   ) {
     this._setSize(domContainer, renderer, camera);
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       // set the size again if a resize occurs
       this._setSize(domContainer, renderer, camera);
       // perform any custom actions

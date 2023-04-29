@@ -1,10 +1,10 @@
 import { PerspectiveCamera, Vector3 } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
-import {
-  ThreeDRendererCameraOptions,
-  DEFAULT_CAMERA_OPTIONS,
-} from './camera-options';
+import { IConfigurable } from '../../shared/interfaces';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
+import {
+  DEFAULT_CAMERA_OPTIONS,
+  ThreeDRendererCameraOptions
+} from './camera-options';
 
 export class ThreeDRendererCamera
   extends PerspectiveCamera
@@ -15,7 +15,7 @@ export class ThreeDRendererCamera
     this.up.set(0, 0, 1);
     const options = {
       ...DEFAULT_CAMERA_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this.updateWithOptions(options);
   }

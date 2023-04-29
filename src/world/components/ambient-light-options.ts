@@ -1,4 +1,4 @@
-import { ColorRepresentation } from "three";
+import { ColorRepresentation } from 'three';
 
 export interface ThreeDRendererAmbientLightOptions {
   color: ColorRepresentation;
@@ -7,6 +7,6 @@ export interface ThreeDRendererAmbientLightOptions {
 
 export const DEFAULT_AMBIENT_LIGHT_OPTIONS: ThreeDRendererAmbientLightOptions =
   {
-    color: "white",
-    intensity: 0.2,
+    color: 'white',
+    intensity: 0.2
   };

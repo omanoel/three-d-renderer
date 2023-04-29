@@ -14,6 +14,6 @@ export const DEFAULT_DIRECTIONAL_LIGHT_OPTIONS: ThreeDRendererDirectionalLightOp
     position: {
       x: 10,
       y: 10,
-      z: 10,
-    },
+      z: 10
+    }
   };

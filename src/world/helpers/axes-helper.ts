@@ -1,37 +1,50 @@
 import { ArrowHelper, Object3D, Vector3 } from 'three';
 import { AbstractOnlyTickableGroup } from '../../shared/abstract-xxxxxable-group';
 import { SharedAxisTypes } from '../../shared/i-options';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import {
+  IConfigurable,
+  IOnlyTickable,
+  ITickParams
+} from '../../shared/interfaces';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
   DEFAULT_AXES_HELPER_OPTIONS,
-  ThreeDRendererAxesHelperOptions,
+  ThreeDRendererAxesHelperOptions
 } from './axes-helper-options';
 
 export class ThreeDRendererAxesHelper
-  extends AbstractOnlyTickableGroup
+  extends AbstractOnlyTickableGroup<IOnlyTickable>
   implements IConfigurable<ThreeDRendererAxesHelperOptions>
 {
   //
   public static readonly AXIS_ARROW_NAME = 'axis-arrow-';
   //
+  public type: string;
+  //
   private _originalDistanceToTarget: number;
+  private _tickTargetPos: Vector3;
   private _options: ThreeDRendererAxesHelperOptions;
   // =======================================
   // CONSTRUCTOR
   // =======================================
   constructor(
     distanceToTarget: number,
+    targetPos: Vector3,
+    initActions?: Partial<IOnlyTickable>,
     initOptions?: Partial<ThreeDRendererAxesHelperOptions>
   ) {
-    super();
+    super(initActions);
     const options: ThreeDRendererAxesHelperOptions = {
       ...DEFAULT_AXES_HELPER_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
+    this.type = 'ThreeDRendererAxesHelper';
     this._originalDistanceToTarget = distanceToTarget;
+    this._tickTargetPos = targetPos;
     this._options = options;
     this._build(options);
+    // override onTick
+    this.userData.onTick = this.tick.bind(this);
   }
 
   // =======================================
@@ -49,11 +62,8 @@ export class ThreeDRendererAxesHelper
       }
     }
   }
-  public tick(delta: number): void {
-    // can be overriden in world
-  }
-  public resize(distance: number, targetPos: Vector3): void {
-    this._update(distance / this._originalDistanceToTarget, targetPos);
+  public tick(_deltaTime: number, params: ITickParams): void {
+    this._update(params.distance, this._tickTargetPos);
   }
 
   // =======================================
@@ -75,9 +85,13 @@ export class ThreeDRendererAxesHelper
     );
   }
 
-  private _update(scale: number, position: Vector3): void {
-    this.position.set(position.x, position.y, position.z);
-    this.scale.set(scale, scale, scale);
+  private _update(distance: number, targetPos: Vector3): void {
+    this._resize(distance / this._originalDistanceToTarget);
+    this.position.set(targetPos.x, targetPos.y, targetPos.z);
+  }
+
+  private _resize(ratio: number): void {
+    this.scale.set(ratio, ratio, ratio);
   }
 
   private _initAxisArrow(

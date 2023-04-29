@@ -1,7 +1,7 @@
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import {
   DEFAULT_DIALOG_BOX_OPTIONS,
-  ThreeDRendererDialogBoxOptions,
+  ThreeDRendererDialogBoxOptions
 } from './dialog-box-options';
 import './dialog-box.css';
 
@@ -26,7 +26,7 @@ export class ThreeDRendererDialogBox
   ) {
     const options = {
       ...DEFAULT_DIALOG_BOX_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
     this._options = options;
     this._panel = domContainer.ownerDocument.createElement('div');

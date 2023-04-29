@@ -1,8 +1,7 @@
 import { Vector3 } from 'three';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
-import './info-box.css';
 
-export class InfoBox {
+export class ThreeDRendererInfoBox {
   //
   private _infoBox: HTMLDivElement;
   private _messages: Map<string, string> = new Map();
@@ -31,13 +30,13 @@ export class InfoBox {
   }
   public addMessagePosition(id: string, message: string, pos: Vector3): void {
     const messagePos =
-      ': (' +
+      ': ( ' +
       GetOptionValueUtil.getFixedValue(pos.x) +
-      ',' +
+      ' , ' +
       GetOptionValueUtil.getFixedValue(pos.y) +
-      ',' +
+      ' , ' +
       GetOptionValueUtil.getFixedValue(pos.z) +
-      ')';
+      ' )';
     this._messages.set(id, message + messagePos);
     this._setInnerHtml();
   }

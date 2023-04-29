@@ -1,19 +1,19 @@
 import { SharedPositionOptions } from '../shared/i-options';
 import {
   DEFAULT_BASICS_OPTIONS,
-  ThreeDRendererBasicsOptions,
+  ThreeDRendererBasicsOptions
 } from './basics/_basics-options';
 import {
   DEFAULT_COMPONENTS_OPTIONS,
-  ThreeDRendererComponentsOptions,
+  ThreeDRendererComponentsOptions
 } from './components/_components-options';
 import {
   DEFAULT_HELPERS_OPTIONS,
-  ThreeDRendererHelpersOptions,
+  ThreeDRendererHelpersOptions
 } from './helpers/_helpers-options';
 import {
   DEFAULT_PANELS_OPTIONS,
-  ThreeDRendererPanelsOptions,
+  ThreeDRendererPanelsOptions
 } from './panels/_panels-options';
 
 /**
@@ -26,6 +26,7 @@ export interface ThreeDRendererWorldOptions {
   panels: ThreeDRendererPanelsOptions;
   components: ThreeDRendererComponentsOptions;
   worldOrigin: SharedPositionOptions;
+  displayStats: boolean;
 }
 
 export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
@@ -36,6 +37,7 @@ export const DEFAULT_WORLD_OPTIONS: ThreeDRendererWorldOptions = {
   worldOrigin: {
     x: 200,
     y: 0,
-    z: 0,
+    z: 0
   },
+  displayStats: true
 };

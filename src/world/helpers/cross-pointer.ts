@@ -1,23 +1,21 @@
+import { BufferGeometry, Color, Line, LineBasicMaterial, Vector3 } from 'three';
+import { AbstractOnlyTickableGroup } from '../../shared/abstract-xxxxxable-group';
 import {
-  BufferGeometry,
-  Color,
-  Group,
-  Line,
-  LineBasicMaterial,
-  Vector3,
-} from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+  IConfigurable,
+  IOnlyTickable,
+  ITickParams
+} from '../../shared/interfaces';
 import {
-  ThreeDRendererCrossPointerOptions,
   DEFAULT_CROSS_POINTER_OPTIONS,
+  ThreeDRendererCrossPointerOptions
 } from './cross-pointer-options';
 
 export class ThreeDRendererCrossPointer
-  extends Group
+  extends AbstractOnlyTickableGroup<IOnlyTickable>
   implements IConfigurable<ThreeDRendererCrossPointerOptions>
 {
   //
-  public static NAME = 'CROSS_POINTER';
+  public type: string;
   private _material: LineBasicMaterial;
   private _originalDistanceToTarget: number;
   private _lineLength: number;
@@ -27,22 +25,25 @@ export class ThreeDRendererCrossPointer
   // =======================================
   constructor(
     distanceToTarget: number,
+    initActions?: Partial<IOnlyTickable>,
     initOptions?: Partial<ThreeDRendererCrossPointerOptions>
   ) {
-    super();
+    super(initActions);
     const options: ThreeDRendererCrossPointerOptions = {
       ...DEFAULT_CROSS_POINTER_OPTIONS,
-      ...initOptions,
+      ...initOptions
     };
+    this.type = 'ThreeDRendererCrossPointer';
     this._material = new LineBasicMaterial({
       color: options.color,
-      linewidth: options.lineWidth,
+      linewidth: options.lineWidth
     });
     this.visible = false;
-    this.name = ThreeDRendererCrossPointer.NAME;
     this._originalDistanceToTarget = distanceToTarget;
     this._lineLength = options.lineLength;
     this._build(options);
+    // override onTick
+    this.userData.onTick = this.tick.bind(this);
   }
 
   // =======================================
@@ -65,12 +66,8 @@ export class ThreeDRendererCrossPointer
   public hide(): void {
     this.visible = false;
   }
-  public resize(distance: number): void {
-    const options: Partial<ThreeDRendererCrossPointerOptions> = {
-      lineLength:
-        (this._lineLength * distance) / this._originalDistanceToTarget,
-    };
-    this._build(options);
+  public tick(_deltaTime: number, params: ITickParams): void {
+    this._update(params.distance);
   }
 
   // =======================================
@@ -92,7 +89,7 @@ export class ThreeDRendererCrossPointer
   ): Line {
     const linesData = [
       new Vector3(-lineLength, 0, 0),
-      new Vector3(+lineLength, 0, 0),
+      new Vector3(+lineLength, 0, 0)
     ];
     const geometry = new BufferGeometry().setFromPoints(linesData);
     const crossLine = new Line(geometry, this._material);
@@ -100,5 +97,13 @@ export class ThreeDRendererCrossPointer
     crossLine.rotateY(yRotation);
     crossLine.rotateZ(zRotation);
     return crossLine;
+  }
+
+  private _update(distance: number): void {
+    this._resize(distance / this._originalDistanceToTarget);
+  }
+  //
+  private _resize(ratio: number): void {
+    this.scale.setScalar(ratio);
   }
 }

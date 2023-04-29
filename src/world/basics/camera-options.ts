@@ -51,11 +51,11 @@ export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
   position: {
     x: -25,
     y: -25,
-    z: 25,
+    z: 25
   },
   lookAt: {
     x: 0,
     y: 0,
-    z: 0,
-  },
+    z: 0
+  }
 };
