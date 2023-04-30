@@ -3,7 +3,8 @@ import { Object3D, Vector3 } from 'three';
 export interface ITickParams {
   distance: number;
   cameraPos: Vector3;
-  targetPos?: Vector3;
+  worldOrigin: Vector3;
+  targetPos: Vector3;
 }
 
 export interface IConfigurable<OPT> {

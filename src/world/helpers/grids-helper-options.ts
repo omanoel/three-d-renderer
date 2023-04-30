@@ -1,12 +1,19 @@
 import { ColorRepresentation } from 'three';
 import {
   SharedLabelOptions,
-  SharedObject3DOptions,
-  SharedPositionOptions
+  SharedObject3DOptions
 } from '../../shared/i-options';
 
-export interface ThreeDRendererGridsHelperOptions {
-  gridOrigin: SharedPositionOptions;
+export interface ThreeDRendererGridsHelperOptions
+  extends SharedObject3DOptions {
+  /**
+   * if true, the scale is updated relative to the distance between camera and target
+   */
+  autoScale: boolean;
+  /**
+   * if true, the position is set relative to controls target position
+   */
+  trackTarget: boolean;
   divisions: number;
   size: number;
   xy: ThreeDRendererGridsHelperPlaneOptions;
@@ -24,9 +31,12 @@ export interface ThreeDRendererGridsHelperPlaneOptions
 }
 
 export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
-  gridOrigin: {
-    x: 0,
-    y: 0,
+  autoScale: true,
+  trackTarget: true,
+  visible: true,
+  position: {
+    x: 200,
+    y: 100,
     z: 0
   },
   divisions: 10,

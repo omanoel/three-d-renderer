@@ -1,8 +1,8 @@
 import { Color, DirectionalLight } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import {
-  ThreeDRendererDirectionalLightOptions,
-  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS
+  DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
+  ThreeDRendererDirectionalLightOptions
 } from './directional-light-options';
 
 export class ThreeDRendererDirectionalLight
@@ -10,13 +10,26 @@ export class ThreeDRendererDirectionalLight
   implements IConfigurable<ThreeDRendererDirectionalLightOptions>
 {
   //
+  public type: string;
+  //
   constructor(initOptions?: Partial<ThreeDRendererDirectionalLightOptions>) {
+    //
     super();
-    const options = {
+    //
+    this.type = 'ThreeDRendererDirectionalLight';
+    //
+    this.userData.options = {
       ...DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,
       ...initOptions
     };
-    this.updateWithOptions(options);
+    //
+    this.color = this._colorFromUserData;
+    this.intensity = this._intensityFromUserData;
+    this.position.set(
+      this.userData.options.position.x,
+      this.userData.options.position.y,
+      this.userData.options.position.z
+    );
   }
   //
 
@@ -24,17 +37,28 @@ export class ThreeDRendererDirectionalLight
     options: Partial<ThreeDRendererDirectionalLightOptions>
   ): void {
     if (options.color !== undefined) {
-      this.color = new Color(options.color);
+      this.userData.options.color = options.color;
+      this.color = this._colorFromUserData;
     }
     if (options.intensity !== undefined) {
-      this.intensity = options.intensity;
+      this.userData.options.intensity = options.intensity;
+      this.intensity = this._intensityFromUserData;
     }
     if (options.position !== undefined) {
+      this.userData.options.position = options.position;
       this.position.set(
-        options.position.x,
-        options.position.y,
-        options.position.z
+        this.userData.options.position.x,
+        this.userData.options.position.y,
+        this.userData.options.position.z
       );
     }
+  }
+
+  private get _colorFromUserData(): Color {
+    return new Color(this.userData.options.color);
+  }
+
+  private get _intensityFromUserData(): number {
+    return this.userData.options.intensity;
   }
 }

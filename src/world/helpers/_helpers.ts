@@ -1,4 +1,3 @@
-import { Group } from 'three';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
 import { SharedPositionOptions } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces';
@@ -11,14 +10,15 @@ import {
 import { ThreeDRendererAxesHelper } from './axes-helper';
 import { ThreeDRendererCrossPointer } from './cross-pointer';
 import { ThreeDRendererGridsHelper } from './grids-helper';
+import { ThreeDRendererTargetHelper } from './target-helper';
 
 export class ThreeDRendererHelpers
-  extends Group
   implements IConfigurable<ThreeDRendererHelpersOptions>
 {
   private _threeDRendererAxesHelper: ThreeDRendererAxesHelper;
   private _threeDRendererCrossPointer: ThreeDRendererCrossPointer;
   private _threeDRendererGridsHelper: ThreeDRendererGridsHelper;
+  private _threeDRendererTargetHelper: ThreeDRendererTargetHelper;
 
   // =======================================
   // CONSTRUCTOR
@@ -30,15 +30,12 @@ export class ThreeDRendererHelpers
     worldOrigin: SharedPositionOptions,
     initOptions?: Partial<ThreeDRendererHelpersOptions>
   ) {
-    super();
     const options = {
       ...DEFAULT_HELPERS_OPTIONS,
       ...initOptions
     };
-    options.gridsHelper.gridOrigin = worldOrigin;
     this._threeDRendererAxesHelper = new ThreeDRendererAxesHelper(
       threeDRendererControls.distanceToTarget,
-      threeDRendererControls.target,
       {},
       options.axesHelper
     );
@@ -54,10 +51,10 @@ export class ThreeDRendererHelpers
       {},
       options.gridsHelper
     );
-    this.add(
-      this._threeDRendererAxesHelper,
-      this._threeDRendererCrossPointer,
-      this._threeDRendererGridsHelper
+    this._threeDRendererTargetHelper = new ThreeDRendererTargetHelper(
+      threeDRendererControls.distanceToTarget,
+      {},
+      options.targetHelper
     );
   }
 
@@ -76,6 +73,9 @@ export class ThreeDRendererHelpers
     if (options.gridsHelper !== undefined) {
       this._threeDRendererGridsHelper.updateWithOptions(options.gridsHelper);
     }
+    if (options.targetHelper !== undefined) {
+      this._threeDRendererTargetHelper.updateWithOptions(options.targetHelper);
+    }
   }
 
   // =======================================
@@ -89,5 +89,8 @@ export class ThreeDRendererHelpers
   }
   public get threeDRendererGridsHelper(): ThreeDRendererGridsHelper {
     return this._threeDRendererGridsHelper;
+  }
+  public get threeDRendererTargetHelper(): ThreeDRendererTargetHelper {
+    return this._threeDRendererTargetHelper;
   }
 }

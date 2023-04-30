@@ -1,5 +1,6 @@
 import { Intersection, Object3D } from 'three';
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
+import { ITickParams } from '../shared';
 import { FindObjectUtil } from '../shared/utils/find-object-util';
 import { GetOptionValueUtil } from './../shared/utils/get-option-value-util';
 import jsonFont from './assets/fonts/optimer_bold.typeface.json';
@@ -54,6 +55,7 @@ export class ThreeDRendererWorld {
     this._threeDRendererBasics = new ThreeDRendererBasics(
       this._domContainer,
       this._threeDRendererRenderer,
+      this._options.worldOrigin,
       this._options.basics
     );
 
@@ -80,8 +82,13 @@ export class ThreeDRendererWorld {
     this._api = new ThreeDRendererWorldApi(this);
 
     // Add helpers + components in scene
-    this._api.addObject(this._threeDRendererHelpers);
-    this._api.addObject(this._threeDRendererComponents);
+    this._api.addObject(this._threeDRendererHelpers.threeDRendererAxesHelper);
+    this._api.addObject(this._threeDRendererHelpers.threeDRendererCrossPointer);
+    this._api.addObject(this._threeDRendererHelpers.threeDRendererGridsHelper);
+    this._api.addObject(this._threeDRendererHelpers.threeDRendererTargetHelper);
+    this._api.addObject(
+      this._threeDRendererComponents.threeDRendererAmbientLight
+    );
 
     // Info box
     this._threeDRendererInfoBox = new ThreeDRendererInfoBox(this._domContainer);
@@ -136,12 +143,14 @@ export class ThreeDRendererWorld {
         const distanceToCamera = t.userData.computeDistanceToCamera(
           this._threeDRendererBasics.threeDRendererCamera.position
         );
+        const tickParams: ITickParams = {
+          distance: distanceToCamera,
+          worldOrigin: GetOptionValueUtil.getVector3(this._options.worldOrigin),
+          cameraPos: this._threeDRendererBasics.threeDRendererCamera.position,
+          targetPos: this._threeDRendererBasics.threeDRendererControls.target
+        };
         if (t.userData.onTick !== undefined) {
-          t.userData.onTick(deltaTime, {
-            distance: distanceToCamera,
-            worldOrigin: this._options.worldOrigin,
-            cameraPos: this._threeDRendererBasics.threeDRendererCamera.position
-          });
+          t.userData.onTick(deltaTime, tickParams);
         }
       }
     );

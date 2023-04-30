@@ -6,7 +6,7 @@ import { SharedPositionOptions } from '../../shared/i-options';
  */
 export interface ThreeDRendererCameraOptions {
   /**
-   * Camera frustum vertical field of view
+   * Camera frustum vertical field of view, from bottom to top of view, in degrees.
    *
    * @defaultValue 50
    */
@@ -49,12 +49,12 @@ export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
   near: 0.1,
   far: 20000,
   position: {
-    x: -25,
+    x: 175,
     y: -25,
     z: 25
   },
   lookAt: {
-    x: 0,
+    x: 200,
     y: 0,
     z: 0
   }

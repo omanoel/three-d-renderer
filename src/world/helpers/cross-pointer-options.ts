@@ -1,14 +1,14 @@
 import { ColorRepresentation } from 'three';
 
 export interface ThreeDRendererCrossPointerOptions {
-  lineWidth: number;
+  autoScale: boolean;
   lineLength: number;
   color: ColorRepresentation;
 }
 
 export const DEFAULT_CROSS_POINTER_OPTIONS: ThreeDRendererCrossPointerOptions =
   {
-    lineWidth: 2,
+    autoScale: true,
     lineLength: 0.5,
     color: 'red'
   };

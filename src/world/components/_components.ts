@@ -1,14 +1,12 @@
-import { Group } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
+import {
+  DEFAULT_COMPONENTS_OPTIONS,
+  ThreeDRendererComponentsOptions
+} from './_components-options';
 import { ThreeDRendererAmbientLight } from './ambient-light';
 import { ThreeDRendererDirectionalLight } from './directional-light';
-import {
-  ThreeDRendererComponentsOptions,
-  DEFAULT_COMPONENTS_OPTIONS
-} from './_components-options';
 
 export class ThreeDRendererComponents
-  extends Group
   implements IConfigurable<ThreeDRendererComponentsOptions>
 {
   private _threeDRendererAmbientLight: ThreeDRendererAmbientLight;
@@ -18,7 +16,6 @@ export class ThreeDRendererComponents
   // CONSTRUCTOR
   // =======================================
   constructor(initOptions?: Partial<ThreeDRendererComponentsOptions>) {
-    super();
     const options = {
       ...DEFAULT_COMPONENTS_OPTIONS,
       ...initOptions
@@ -27,8 +24,6 @@ export class ThreeDRendererComponents
     this._threeDRendererDirectionalLight = new ThreeDRendererDirectionalLight();
 
     this.updateWithOptions(options);
-    this.add(this._threeDRendererAmbientLight);
-    this.add(this._threeDRendererDirectionalLight);
   }
 
   // =======================================

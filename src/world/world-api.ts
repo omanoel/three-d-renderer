@@ -20,6 +20,9 @@ export class ThreeDRendererWorldApi {
       this._world.options.worldOrigin.y,
       this._world.options.worldOrigin.z
     );
+    if (obj.userData.options.position === undefined) {
+      obj.userData.options.position = this._world.options.worldOrigin;
+    }
     this._world.threeDRendererBasics.addObject(obj, worldOrigin);
   }
   public getObjectById(id: number): Object3D | undefined {

@@ -1,4 +1,5 @@
 import { PerspectiveCamera, Vector3 } from 'three';
+import { SharedPositionOptions } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces';
 import { GetOptionValueUtil } from '../../shared/utils/get-option-value-util';
 import {
@@ -6,18 +7,35 @@ import {
   ThreeDRendererCameraOptions
 } from './camera-options';
 
+/**
+ * Class to manage perspective camera
+ *
+ * - up set on z axis (used for orbit controls)
+ */
 export class ThreeDRendererCamera
   extends PerspectiveCamera
   implements IConfigurable<ThreeDRendererCameraOptions>
 {
-  constructor(initOptions?: Partial<ThreeDRendererCameraOptions>) {
+  constructor(
+    worldOrigin: SharedPositionOptions,
+    initOptions?: Partial<ThreeDRendererCameraOptions>
+  ) {
     super();
     this.up.set(0, 0, 1);
     const options = {
       ...DEFAULT_CAMERA_OPTIONS,
       ...initOptions
     };
-    this.updateWithOptions(options);
+    this.fov = options.fov;
+    this.aspect = options.aspect;
+    this.near = options.near;
+    this.far = options.far;
+    const localPosition = new Vector3(
+      options.position.x,
+      options.position.y,
+      options.position.z
+    ).sub(GetOptionValueUtil.getVector3(worldOrigin));
+    this.position.set(localPosition.x, localPosition.y, localPosition.z);
   }
 
   public updateWithOptions(
@@ -27,7 +45,7 @@ export class ThreeDRendererCamera
     this.aspect = GetOptionValueUtil.getIfDefined(this.aspect, options.aspect);
     this.near = GetOptionValueUtil.getIfDefined(this.near, options.near);
     this.far = GetOptionValueUtil.getIfDefined(this.far, options.far);
-
+    /*
     if (options.position !== undefined) {
       this.position.set(
         GetOptionValueUtil.getIfDefined(this.position.x, options.position.x),
@@ -53,6 +71,6 @@ export class ThreeDRendererCamera
           )
         )
       );
-    }
+    }*/
   }
 }

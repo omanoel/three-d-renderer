@@ -13,6 +13,14 @@ export interface ThreeDRendererAxesHelperOptions extends SharedObject3DOptions {
    */
   length: number;
   /**
+   * True if size of axes depends on distance to camera
+   */
+  autoScale: boolean;
+  /**
+   * True if axes are positionned on controls target position
+   */
+  trackTarget: boolean;
+  /**
    * Represents the options available to alter the properties
    * of the X AxisArrow object rendered by the library
    */
@@ -27,6 +35,12 @@ export interface ThreeDRendererAxesHelperOptions extends SharedObject3DOptions {
    * of the Z AxisArrow object rendered by the library
    */
   z: ThreeDRendererAxisHelperOptions;
+  /**
+   * Color of all the axis arrows.
+   *
+   * @defaultValue 'grey'
+   */
+  color: ColorRepresentation;
 }
 
 /**
@@ -50,7 +64,10 @@ export interface ThreeDRendererAxisHelperOptions extends SharedObject3DOptions {
 
 export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
   visible: true,
-  length: 5,
+  length: 2,
+  autoScale: false,
+  trackTarget: true,
+  color: 'grey',
   position: {
     x: 0,
     y: 0,

@@ -22,27 +22,26 @@ export class ThreeDRendererAxesHelper
   public type: string;
   //
   private _originalDistanceToTarget: number;
-  private _tickTargetPos: Vector3;
-  private _options: ThreeDRendererAxesHelperOptions;
   // =======================================
   // CONSTRUCTOR
   // =======================================
   constructor(
     distanceToTarget: number,
-    targetPos: Vector3,
     initActions?: Partial<IOnlyTickable>,
     initOptions?: Partial<ThreeDRendererAxesHelperOptions>
   ) {
+    //
     super(initActions);
-    const options: ThreeDRendererAxesHelperOptions = {
+    //
+    this.type = 'ThreeDRendererAxesHelper';
+    //
+    this.userData.options = {
       ...DEFAULT_AXES_HELPER_OPTIONS,
       ...initOptions
     };
-    this.type = 'ThreeDRendererAxesHelper';
+    //
     this._originalDistanceToTarget = distanceToTarget;
-    this._tickTargetPos = targetPos;
-    this._options = options;
-    this._build(options);
+    this._build();
     // override onTick
     this.userData.onTick = this.tick.bind(this);
   }
@@ -61,33 +60,35 @@ export class ThreeDRendererAxesHelper
         //
       }
     }
+    if (options.autoScale !== undefined) {
+      this.userData.options.autoScale = options.autoScale;
+    }
   }
   public tick(_deltaTime: number, params: ITickParams): void {
-    this._update(params.distance, this._tickTargetPos);
+    this._update(params.distance, params.targetPos);
   }
 
   // =======================================
   // PRIVATE
   // =======================================
-  private _build(options: ThreeDRendererAxesHelperOptions): void {
+  private _build(): void {
     this.clear();
     const axisArrowX = this._initAxisArrow('x');
     const axisArrowY = this._initAxisArrow('y');
     const axisArrowZ = this._initAxisArrow('z');
-    this._updateAxisArrowWithOptions(axisArrowX, options, 'x');
-    this._updateAxisArrowWithOptions(axisArrowY, options, 'y');
-    this._updateAxisArrowWithOptions(axisArrowZ, options, 'z');
+    this._updateAxisArrowWithOptions(axisArrowX, 'x');
+    this._updateAxisArrowWithOptions(axisArrowY, 'y');
+    this._updateAxisArrowWithOptions(axisArrowZ, 'z');
     this.add(axisArrowX, axisArrowY, axisArrowZ);
-    this.position.set(
-      options.position.x,
-      options.position.y,
-      options.position.z
-    );
   }
 
   private _update(distance: number, targetPos: Vector3): void {
-    this._resize(distance / this._originalDistanceToTarget);
-    this.position.set(targetPos.x, targetPos.y, targetPos.z);
+    if (this.userData.options.autoScale === true) {
+      this._resize(distance / this._originalDistanceToTarget);
+    }
+    if (this.userData.options.trackTarget === true) {
+      this.position.set(targetPos.x, targetPos.y, targetPos.z);
+    }
   }
 
   private _resize(ratio: number): void {
@@ -105,7 +106,7 @@ export class ThreeDRendererAxesHelper
         arrowOptions.position.y,
         arrowOptions.position.z
       ),
-      this._options.length,
+      this.userData.options.length,
       arrowOptions.color
     );
     arrow.name = ThreeDRendererAxesHelper.AXIS_ARROW_NAME + axis;
@@ -136,34 +137,34 @@ export class ThreeDRendererAxesHelper
 
   private _updateAxisArrowWithOptions(
     axisArrow: Object3D,
-    axisHelperOptions: Partial<ThreeDRendererAxesHelperOptions>,
     axisArrowOptionsAttributeName: keyof Pick<
       ThreeDRendererAxesHelperOptions,
       SharedAxisTypes
     >
   ): void {
-    const axisArrowOptions = axisHelperOptions[axisArrowOptionsAttributeName];
+    const axisArrowOptions =
+      this.userData.options[axisArrowOptionsAttributeName];
 
     axisArrow.visible = GetOptionValueUtil.getIfDefined(
       axisArrow.visible,
-      axisHelperOptions.visible,
+      this.userData.options.visible,
       axisArrowOptions?.visible
     );
 
     axisArrow.position.set(
       GetOptionValueUtil.getIfDefined(
         axisArrow.position.x,
-        axisHelperOptions.position?.x,
+        this.userData.options.position?.x,
         axisArrowOptions?.position?.x
       ),
       GetOptionValueUtil.getIfDefined(
         axisArrow.position.y,
-        axisHelperOptions.position?.y,
+        this.userData.options.position?.y,
         axisArrowOptions?.position?.y
       ),
       GetOptionValueUtil.getIfDefined(
         axisArrow.position.z,
-        axisHelperOptions.position?.z,
+        this.userData.options.position?.z,
         axisArrowOptions?.position?.z
       )
     );
@@ -176,9 +177,7 @@ export class ThreeDRendererAxesHelper
         )
       );
 
-      if (axisHelperOptions?.length !== undefined) {
-        axisArrow.setLength(axisHelperOptions.length);
-      }
+      axisArrow.setLength(this.userData.options.length);
 
       if (axisArrowOptions?.color !== undefined) {
         axisArrow.setColor(axisArrowOptions.color);

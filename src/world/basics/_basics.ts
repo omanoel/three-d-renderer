@@ -1,4 +1,5 @@
 import { Object3D, Vector3 } from 'three';
+import { SharedPositionOptions } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces';
 import { SharedBoundingBoxUtil } from '../../shared/utils/bounding-box-util';
 import { ThreeDRendererRenderer } from '../systems/renderer';
@@ -33,6 +34,7 @@ export class ThreeDRendererBasics
   constructor(
     domContainer: HTMLDivElement,
     threeDRendererRenderer: ThreeDRendererRenderer,
+    worldOrigin: SharedPositionOptions,
     initOptions?: Partial<ThreeDRendererBasicsOptions>
   ) {
     const options = {
@@ -40,7 +42,10 @@ export class ThreeDRendererBasics
       ...initOptions
     };
     this._threeDRendererScene = new ThreeDRendererScene(options.scene);
-    this._threeDRendererCamera = new ThreeDRendererCamera(options.camera);
+    this._threeDRendererCamera = new ThreeDRendererCamera(
+      worldOrigin,
+      options.camera
+    );
     this._threeDRendererControls = new ThreeDRendererControls(
       this._threeDRendererCamera,
       domContainer,

@@ -6,3 +6,5 @@ export * from './cross-pointer';
 export * from './cross-pointer-options';
 export * from './grids-helper';
 export * from './grids-helper-options';
+export * from './target-helper';
+export * from './target-helper-options';

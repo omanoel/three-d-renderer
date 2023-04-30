@@ -1,8 +1,8 @@
 import { AmbientLight, Color } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import {
-  ThreeDRendererAmbientLightOptions,
-  DEFAULT_AMBIENT_LIGHT_OPTIONS
+  DEFAULT_AMBIENT_LIGHT_OPTIONS,
+  ThreeDRendererAmbientLightOptions
 } from './ambient-light-options';
 
 export class ThreeDRendererAmbientLight
@@ -10,19 +10,23 @@ export class ThreeDRendererAmbientLight
   implements IConfigurable<ThreeDRendererAmbientLightOptions>
 {
   constructor(initOptions?: Partial<ThreeDRendererAmbientLightOptions>) {
+    //
     super();
-    const options = {
+    //
+    this.userData.options = {
       ...DEFAULT_AMBIENT_LIGHT_OPTIONS,
       ...initOptions
     };
-    this.updateWithOptions(options);
+    //
+    this.color = new Color(this.userData.options.color);
   }
 
   public updateWithOptions(
     options: Partial<ThreeDRendererAmbientLightOptions>
   ): void {
     if (options.color !== undefined) {
-      this.color = new Color(options.color);
+      this.userData.options.color = options.color;
+      this.color = new Color(this.userData.options.color);
     }
   }
 }

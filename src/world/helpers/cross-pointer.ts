@@ -16,9 +16,9 @@ export class ThreeDRendererCrossPointer
 {
   //
   public type: string;
+  //
   private _material: LineBasicMaterial;
   private _originalDistanceToTarget: number;
-  private _lineLength: number;
 
   // =======================================
   // CONSTRUCTOR
@@ -28,20 +28,22 @@ export class ThreeDRendererCrossPointer
     initActions?: Partial<IOnlyTickable>,
     initOptions?: Partial<ThreeDRendererCrossPointerOptions>
   ) {
+    //
     super(initActions);
-    const options: ThreeDRendererCrossPointerOptions = {
+    //
+    this.type = 'ThreeDRendererCrossPointer';
+    //
+    this.userData.options = {
       ...DEFAULT_CROSS_POINTER_OPTIONS,
       ...initOptions
     };
-    this.type = 'ThreeDRendererCrossPointer';
+    //
     this._material = new LineBasicMaterial({
-      color: options.color,
-      linewidth: options.lineWidth
+      color: this.userData.options.color
     });
     this.visible = false;
     this._originalDistanceToTarget = distanceToTarget;
-    this._lineLength = options.lineLength;
-    this._build(options);
+    this._build();
     // override onTick
     this.userData.onTick = this.tick.bind(this);
   }
@@ -53,10 +55,14 @@ export class ThreeDRendererCrossPointer
     options: Partial<ThreeDRendererCrossPointerOptions>
   ): void {
     if (options.color !== undefined) {
-      this._material.color = new Color(options.color);
+      this.userData.options.color = options.color;
+      this._material.color = new Color(this.userData.options.color);
     }
-    if (options.lineWidth !== undefined) {
-      this._material.linewidth = options.lineWidth;
+    if (options.lineLength !== undefined) {
+      this.userData.options.lineWidth = options.lineLength;
+    }
+    if (options.autoScale !== undefined) {
+      this.userData.options.autoScale = options.autoScale;
     }
   }
   public display(position: Vector3): void {
@@ -73,13 +79,15 @@ export class ThreeDRendererCrossPointer
   // =======================================
   // PRIVATE
   // =======================================
-  private _build(options: Partial<ThreeDRendererCrossPointerOptions>): void {
-    if (options.lineLength !== undefined) {
-      this.clear();
-      this.add(this._createCrossLine(options.lineLength, 0, 0, 0));
-      this.add(this._createCrossLine(options.lineLength, 0, Math.PI / 2, 0));
-      this.add(this._createCrossLine(options.lineLength, 0, 0, Math.PI / 2));
-    }
+  private _build(): void {
+    this.clear();
+    this.add(this._createCrossLine(this.userData.options.lineLength, 0, 0, 0));
+    this.add(
+      this._createCrossLine(this.userData.options.lineLength, 0, Math.PI / 2, 0)
+    );
+    this.add(
+      this._createCrossLine(this.userData.options.lineLength, 0, 0, Math.PI / 2)
+    );
   }
   private _createCrossLine(
     lineLength: number,
@@ -100,7 +108,9 @@ export class ThreeDRendererCrossPointer
   }
 
   private _update(distance: number): void {
-    this._resize(distance / this._originalDistanceToTarget);
+    if (this.userData.options.autoScale === true) {
+      this._resize(distance / this._originalDistanceToTarget);
+    }
   }
   //
   private _resize(ratio: number): void {

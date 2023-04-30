@@ -1,5 +1,5 @@
 import { Color, Object3D, Scene, Vector3 } from 'three';
-import { IConfigurable } from '../../shared/interfaces/i-configurable';
+import { IConfigurable } from '../../shared/interfaces';
 import {
   DEFAULT_SCENE_OPTIONS,
   ThreeDRendererSceneOptions
@@ -41,7 +41,9 @@ export class ThreeDRendererScene
   }
 
   public addObject(obj: Object3D, worldOrigin: Vector3): void {
-    const worldPos = new Vector3().copy(obj.position).sub(worldOrigin);
+    const worldPos = new Vector3()
+      .copy(obj.userData.options.position)
+      .sub(worldOrigin);
     obj.position.set(worldPos.x, worldPos.y, worldPos.z);
     this.add(obj);
     this._addObjectToCleanables(obj);
