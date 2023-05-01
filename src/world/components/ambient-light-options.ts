@@ -8,5 +8,5 @@ export interface ThreeDRendererAmbientLightOptions {
 export const DEFAULT_AMBIENT_LIGHT_OPTIONS: ThreeDRendererAmbientLightOptions =
   {
     color: 'white',
-    intensity: 0.2
+    intensity: 0.5
   };

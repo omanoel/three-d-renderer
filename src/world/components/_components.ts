@@ -1,4 +1,6 @@
+import { ThreeDRendererSkybox } from '../../customs/skybox';
 import { IConfigurable } from '../../shared/interfaces';
+import { ThreeDRendererControls } from '../basics';
 import {
   DEFAULT_COMPONENTS_OPTIONS,
   ThreeDRendererComponentsOptions
@@ -11,17 +13,24 @@ export class ThreeDRendererComponents
 {
   private _threeDRendererAmbientLight: ThreeDRendererAmbientLight;
   private _threeDRendererDirectionalLight: ThreeDRendererDirectionalLight;
+  private _threeDRendererSkybox: ThreeDRendererSkybox;
 
   // =======================================
   // CONSTRUCTOR
   // =======================================
-  constructor(initOptions?: Partial<ThreeDRendererComponentsOptions>) {
+  constructor(
+    threeDRendererControls: ThreeDRendererControls,
+    initOptions?: Partial<ThreeDRendererComponentsOptions>
+  ) {
     const options = {
       ...DEFAULT_COMPONENTS_OPTIONS,
       ...initOptions
     };
     this._threeDRendererAmbientLight = new ThreeDRendererAmbientLight();
     this._threeDRendererDirectionalLight = new ThreeDRendererDirectionalLight();
+    this._threeDRendererSkybox = new ThreeDRendererSkybox(
+      threeDRendererControls.distanceToTarget
+    );
 
     this.updateWithOptions(options);
   }
@@ -50,5 +59,8 @@ export class ThreeDRendererComponents
   }
   public get threeDRendererDirectionalLight(): ThreeDRendererDirectionalLight {
     return this._threeDRendererDirectionalLight;
+  }
+  public get threeDRendererSkybox(): ThreeDRendererSkybox {
+    return this._threeDRendererSkybox;
   }
 }

@@ -21,7 +21,6 @@ export class ThreeDRendererCamera
     initOptions?: Partial<ThreeDRendererCameraOptions>
   ) {
     super();
-    this.up.set(0, 0, 1);
     const options = {
       ...DEFAULT_CAMERA_OPTIONS,
       ...initOptions

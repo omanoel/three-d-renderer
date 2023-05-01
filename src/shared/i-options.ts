@@ -1,6 +1,15 @@
 export interface SharedPositionOptions {
+  /**
+   * along horizontal x axis
+   */
   x: number;
+  /**
+   * along vertical y axis
+   */
   y: number;
+  /**
+   * along horizontal z axis
+   */
   z: number;
 }
 

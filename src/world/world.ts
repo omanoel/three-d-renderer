@@ -71,12 +71,13 @@ export class ThreeDRendererWorld {
       this._threeDRendererBasics.threeDRendererCamera,
       this._threeDRendererBasics.threeDRendererControls,
       defaultFont,
-      this._options.worldOrigin,
       this._options.helpers
     );
 
     // Components
-    this._threeDRendererComponents = new ThreeDRendererComponents();
+    this._threeDRendererComponents = new ThreeDRendererComponents(
+      this._threeDRendererBasics.threeDRendererControls
+    );
 
     // API
     this._api = new ThreeDRendererWorldApi(this);
@@ -89,6 +90,10 @@ export class ThreeDRendererWorld {
     this._api.addObject(
       this._threeDRendererComponents.threeDRendererAmbientLight
     );
+    // this._api.addObject(
+    //   this._threeDRendererComponents.threeDRendererDirectionalLight
+    // );
+    // this._api.addObject(this._threeDRendererComponents.threeDRendererSkybox);
 
     // Info box
     this._threeDRendererInfoBox = new ThreeDRendererInfoBox(this._domContainer);

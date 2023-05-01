@@ -11,16 +11,26 @@ const states = {
 if (container !== null) {
   const app = new App(container);
   const cube = app.appApi?.buildCube({
-    onMouseOver: (event: Event, obj: Object3D) => {
+    onMouseOver: (_event: Event, obj: Object3D) => {
       (obj.children[0] as any).material.color = new Color('blue');
     },
-    onMouseOut: (event: Event, obj: Object3D) => {
+    onMouseOut: (_event: Event, obj: Object3D) => {
       (obj.children[0] as any).material.color = new Color('brown');
     }
   });
   if (cube) {
     app.worldApi?.addObject(cube);
   }
+  /*
+  const sea = app.appApi?.buildSea({}, { waterHeight: 400 });
+  if (sea) {
+    app.worldApi?.addObject(sea);
+  }
+  const sea = new ThreeDRendererWater();
+  if (sea) {
+    app.worldApi?.addObject(sea);
+  }
+  */
   app.render();
   document.getElementById('reset-btn')?.addEventListener(
     'click',

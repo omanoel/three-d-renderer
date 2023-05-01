@@ -12,8 +12,6 @@ import {
   ITickParams,
   ITickable
 } from '../../shared';
-import { ThreeDRendererAxesHelper } from './axes-helper';
-import { ThreeDRendererAxesHelperOptions } from './axes-helper-options';
 import {
   DEFAULT_TARGET_HELPER_OPTIONS,
   ThreeDRendererTargetHelperOptions
@@ -28,7 +26,6 @@ export class ThreeDRendererTargetHelper
   //
   private _originalDistanceToTarget: number;
   private _circleLine: Line | undefined;
-  private _axesHelper: ThreeDRendererAxesHelper | undefined;
   //
   constructor(
     distanceToTarget: number,
@@ -90,37 +87,6 @@ export class ThreeDRendererTargetHelper
     });
     this._circleLine = new Line(geometry, material);
     this.add(this._circleLine);
-  }
-
-  private _buildAxesHelper(): void {
-    const axesHelperOptions: Partial<ThreeDRendererAxesHelperOptions> = {
-      length: 1,
-      autoScale: true,
-      x: {
-        color: this.userData.options.color,
-        inverted: false,
-        position: { x: 0, y: 0, z: 0 },
-        visible: true
-      },
-      y: {
-        color: this.userData.options.color,
-        inverted: false,
-        position: { x: 0, y: 0, z: 0 },
-        visible: true
-      },
-      z: {
-        color: this.userData.options.color,
-        inverted: false,
-        position: { x: 0, y: 0, z: 0 },
-        visible: true
-      }
-    };
-    const axesHelper = new ThreeDRendererAxesHelper(
-      this._originalDistanceToTarget,
-      {},
-      axesHelperOptions
-    );
-    this.add(axesHelper);
   }
 
   private _update(

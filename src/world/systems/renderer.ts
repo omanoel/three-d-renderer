@@ -15,13 +15,13 @@ export class ThreeDRendererRenderer
 {
   constructor(
     domContainer: HTMLDivElement,
-    initOptions?: Partial<ThreeDRendererRendererOptions>
+    _initOptions?: Partial<ThreeDRendererRendererOptions>
   ) {
     super({ antialias: true });
-    const options = {
-      ...DEFAULT_RENDERER_OPTIONS,
-      ...initOptions
-    };
+    // const options = {
+    //   ...DEFAULT_RENDERER_OPTIONS,
+    //   ...initOptions
+    // };
     domContainer.append(this.domElement);
   }
 

@@ -10,13 +10,9 @@ export class ThreeDRendererDirectionalLight
   implements IConfigurable<ThreeDRendererDirectionalLightOptions>
 {
   //
-  public type: string;
-  //
   constructor(initOptions?: Partial<ThreeDRendererDirectionalLightOptions>) {
     //
     super();
-    //
-    this.type = 'ThreeDRendererDirectionalLight';
     //
     this.userData.options = {
       ...DEFAULT_DIRECTIONAL_LIGHT_OPTIONS,

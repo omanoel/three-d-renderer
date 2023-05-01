@@ -1,5 +1,4 @@
 import { Font } from 'three/examples/jsm/loaders/FontLoader';
-import { SharedPositionOptions } from '../../shared/i-options';
 import { IConfigurable } from '../../shared/interfaces';
 import { ThreeDRendererCamera } from '../basics/camera';
 import { ThreeDRendererControls } from '../basics/controls';
@@ -27,7 +26,6 @@ export class ThreeDRendererHelpers
     threeDRendererCamera: ThreeDRendererCamera,
     threeDRendererControls: ThreeDRendererControls,
     font: Font,
-    worldOrigin: SharedPositionOptions,
     initOptions?: Partial<ThreeDRendererHelpersOptions>
   ) {
     const options = {

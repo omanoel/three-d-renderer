@@ -13,5 +13,5 @@ export const DEFAULT_CONTROLS_OPTIONS: ThreeDRendererControlsOptions = {
   maxDistance: Infinity,
   zoomSpeed: 0.3,
   rotateSpeed: 0.3,
-  rangeFactor: 2
+  rangeFactor: 4
 };

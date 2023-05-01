@@ -1,4 +1,4 @@
-import { ColorRepresentation } from 'three';
+import { ColorRepresentation, CubeTexture } from 'three';
 
 export interface ThreeDRendererSceneOptions {
   /**
@@ -7,6 +7,7 @@ export interface ThreeDRendererSceneOptions {
    * @defaultValue 'black'
    */
   backgroundColor: ColorRepresentation;
+  cubeTexture?: CubeTexture;
 }
 
 export const DEFAULT_SCENE_OPTIONS: ThreeDRendererSceneOptions = {

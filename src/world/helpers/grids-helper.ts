@@ -210,7 +210,6 @@ export class ThreeDRendererGridsHelper
     if (this._idGroupLabels !== undefined) {
       this.getObjectById(this._idGroupLabels)?.children.forEach((c) => {
         c.lookAt(cameraPosition);
-        c.up.set(0, 0, 1);
       });
     }
   }

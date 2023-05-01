@@ -91,7 +91,7 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       z: 0
     },
     inverted: false,
-    color: 'green'
+    color: 'blue'
   },
   z: {
     visible: true,
@@ -101,6 +101,6 @@ export const DEFAULT_AXES_HELPER_OPTIONS: ThreeDRendererAxesHelperOptions = {
       z: 0
     },
     inverted: false,
-    color: 'blue'
+    color: 'green'
   }
 };

@@ -18,7 +18,11 @@ export class ThreeDRendererScene
       ...DEFAULT_SCENE_OPTIONS,
       ...initOptions
     };
-    this.updateWithOptions(options);
+    if (options.cubeTexture !== undefined) {
+      this.background = options.cubeTexture;
+    } else {
+      this.background = new Color(options.backgroundColor);
+    }
   }
 
   public updateWithOptions(options: Partial<ThreeDRendererSceneOptions>): void {

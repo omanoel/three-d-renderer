@@ -27,8 +27,8 @@ export class ThreeDRendererControls
       ...initOptions
     };
     this._resetKey = options.resetKey;
-    this.minDistance = camera.near * options.rangeFactor;
-    this.maxDistance = camera.far / options.rangeFactor;
+    this.minDistance = camera.near * 1.01;
+    this.maxDistance = camera.far * 0.99;
     this.zoomSpeed = options.zoomSpeed;
     this.rotateSpeed = options.rotateSpeed;
     this._boundingChangeEvent = () => {

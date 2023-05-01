@@ -26,7 +26,7 @@ export interface ThreeDRendererCameraOptions {
   /**
    * Camera frustum far plane.
    *
-   * @defaultValue 20000
+   * @defaultValue 2000
    */
   far: number;
   /**
@@ -47,10 +47,10 @@ export const DEFAULT_CAMERA_OPTIONS: ThreeDRendererCameraOptions = {
   fov: 50,
   aspect: 1,
   near: 0.1,
-  far: 20000,
+  far: 2000,
   position: {
     x: 175,
-    y: -25,
+    y: 25,
     z: 25
   },
   lookAt: {

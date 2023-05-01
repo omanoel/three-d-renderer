@@ -56,7 +56,7 @@ export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
   xy: {
     visible: true,
     color: 'grey',
-    opacity: 0.5,
+    opacity: 0.2,
     position: {
       x: 0,
       y: 0,
@@ -66,7 +66,7 @@ export const DEFAULT_GRIDS_HELPER_OPTIONS: ThreeDRendererGridsHelperOptions = {
   xz: {
     visible: true,
     color: 'grey',
-    opacity: 0.2,
+    opacity: 0.5,
     position: {
       x: 0,
       y: 0,

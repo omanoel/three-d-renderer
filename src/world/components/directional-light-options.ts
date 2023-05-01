@@ -12,8 +12,8 @@ export const DEFAULT_DIRECTIONAL_LIGHT_OPTIONS: ThreeDRendererDirectionalLightOp
     color: 'white',
     intensity: 5,
     position: {
-      x: 10,
-      y: 10,
-      z: 10
+      x: 100,
+      y: 100,
+      z: 100
     }
   };
