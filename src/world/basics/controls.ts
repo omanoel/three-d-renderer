@@ -78,8 +78,7 @@ export class ThreeDRendererControls
   public resetView(): void {
     this.reset();
     this.dispatchEvent({
-      type: 'change',
-      target: this
+      type: 'change'
     });
   }
 }

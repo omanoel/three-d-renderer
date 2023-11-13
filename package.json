@@ -23,16 +23,16 @@
   },
   "homepage": "https://github.com/omanoel/three-d-renderer#readme",
   "devDependencies": {
-    "@types/three": "^0.150.1",
-    "@typescript-eslint/eslint-plugin": "^5.59.1",
-    "@typescript-eslint/parser": "^5.59.1",
-    "eslint": "^8.39.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@types/three": "^0.158.2",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-no-loops": "^0.3.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.8",
-    "three": "^0.151.3",
-    "typescript": "^5.0.4",
-    "vite": "^4.2.1"
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.1.0",
+    "three": "^0.158.0",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0"
   }
 }

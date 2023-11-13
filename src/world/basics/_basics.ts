@@ -120,8 +120,7 @@ export class ThreeDRendererBasics
     );
     this._threeDRendererControls.update();
     this._threeDRendererControls.dispatchEvent({
-      type: 'change',
-      target: this._threeDRendererControls
+      type: 'change'
     });
   }
   public hideByIds(ids: number[]): void {
